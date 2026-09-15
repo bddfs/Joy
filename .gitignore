@@ -1,0 +1,24 @@
+# Godot generated caches and credentials
+.godot/
+.mono/
+export_credentials.cfg
+
+# .NET generated files
+**/bin/
+**/obj/
+TestResults/
+
+# Local IDE and operating system files
+.vs/
+.idea/
+*.user
+*.suo
+.DS_Store
+Thumbs.db
+
+# Build output and local secrets
+/builds/
+/exports/
+.env
+.env.*
+!.env.example
