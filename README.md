@@ -4,7 +4,7 @@ Joy 是由 **bddfs** 四人团队共同开发的游戏项目，目前名称为�
 
 ## 当前阶段
 
-首个原生单城 Demo 已完成一次实际试玩，目前整理第二轮验证方案。下一轮重点是已知后果预览、主动推理、回收资源取舍和网点成长；完整产品仍以三城远征为目标。
+目前已有原生 M2 单城 Demo，重点验证已知后果预览、主动推理、回收资源取舍和网点成长；完整产品仍以三城远征为目标。M2 实现目前位于 `codex/requirements-v03-implementation` 开发分支，主分支保存设计与需求文档；本次百科核对的固定版本见下方来源页。
 
 已确认方向为单人、Steam Windows/macOS、Godot .NET 与 C#。团队不设固定细分岗位；具体玩法边界、验证范围和待定参数以文档标注为准。
 
@@ -15,6 +15,16 @@ Joy 是由 **bddfs** 四人团队共同开发的游戏项目，目前名称为�
 - 历史版本：[需求 v0.2](docs/requirements/Joy_需求规格说明书_v0.2.md)；[原始策划案 v0.1](docs/design/异常回收公司详细策划案_v0.1.md)。
 
 策划案与需求文档分别编号。本次需求保持 v0.3，以“2026-09-15 策划 v0.2 对齐修订”区分此前同号版本；第 15 节提供 M2 内容、校正日程及验收映射。原策划账例尚未随需求修正，需求中的全部验收场景仍待执行。
+
+## 游戏百科
+
+[Joy Wiki · 异常回收公司百科](docs/wiki/README.md) 收录当前 M2 已定义的地点、房间、异常、卡牌、实物、合同、经营系统和路线参考，共 9 页，含完整剧透。百科将当前可用内容、历史 Legacy 与完整版本规划分别标注，并记录文档和实现之间的差异。
+
+- [地点与房间](docs/wiki/locations.md) · [异常与威胁](docs/wiki/anomalies.md) · [卡牌与基础行动](docs/wiki/cards.md)
+- [物品与工具](docs/wiki/items.md) · [合同与事务](docs/wiki/contracts.md) · [经营、状态与存档](docs/wiki/mechanics.md)
+- [入门与路线参考](docs/wiki/walkthrough.md) · [版本、来源与规划](docs/wiki/sources.md)
+
+[下载完整百科压缩包](output/Joy_Wiki_M2_v1.0.zip)，解压后从 `Joy_Wiki/README.md` 开始阅读。
 
 ## 团队协作
 
