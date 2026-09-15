@@ -31,6 +31,8 @@ Joy 是由 **bddfs** 四人团队共同开发的游戏项目，目前名称为�
 
 ## 运行说明
 
+直接试玩可下载 [Windows 64 位预发行包](https://github.com/bddfs/Joy/releases/tag/v0.3.0-m2.1)，完整解压后运行 `Joy.exe`。包内已带运行时，无需安装开发环境。范围和存档说明见 [本版试玩说明](docs/releases/v0.3.0-m2.1.md)。
+
 在当前 Windows 便携环境，双击仓库上一级的 **Play-Joy.cmd** 即可编译并启动，**Test-Joy.cmd** 运行回归检查；通过 **Open-Godot.cmd** 在编辑器打开工程后按 F6/F5 运行也可以。
 
 团队成员安装 Godot **4.7.2 .NET** 与 .NET SDK **10.0.401**，将 `project.godot` 导入 Godot。详细环境见 [开发环境](docs/development-environment.md)。普通 Godot 不支持本项目的 C# 脚本。
@@ -48,3 +50,15 @@ powershell -ExecutionPolicy Bypass -File tools/dev.ps1 -Action Run
 标题可选择灯具公开报价 6 / 2，并独立开启传播压力。默认场景便于核对需求第 15 节的五日资源安排。计划中的手操队可在“工具配装”页调整随行实物；选定牌和基础动作后，在常驻预览区执行。
 
 代码结构：`Core/` 为不依赖 Godot 的规则与状态，`Scripts/` 为桌面界面，`Scenes/Main.tscn` 为入口，`Tests/` 为可直接运行的验收检查。SDK 版本由 `global.json` 固定；客户端目标框架为 `net8.0`，测试运行器使用本环境的 `net10.0`。
+
+## Windows 发布包构建
+
+安装与编辑器匹配的 **Godot 4.7.2 .NET 导出模板**，提交游戏代码和导出配置后，在仓库根目录执行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tools/release.ps1
+# 非本机便携目录可指定编辑器及工程外的输出目录
+# ./tools/release.ps1 -GodotPath C:/Godot/Godot_console.exe -OutputRoot C:/JoyBuilds
+```
+
+脚本执行回归检查、资源导入和 Windows x64 Release 导出，附带运行时、中文字体、许可、试玩说明及源码提交信息，最后生成 ZIP 和 `SHA256SUMS.txt`。每次使用独立目录，默认位于仓库上一级的 `builds`。发布前还需将 ZIP 解压到新目录，验证启动、基本操作及续玩；脚本本身不会发布 GitHub Release。

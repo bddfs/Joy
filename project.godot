@@ -3,6 +3,7 @@ config_version=5
 
 [application]
 config/name="Joy · 异常回收公司"
+config/version="0.3.0-m2.1"
 run/main_scene="res://Scenes/Main.tscn"
 config/features=PackedStringArray("4.7", "C#", "GL Compatibility")
 
@@ -15,6 +16,9 @@ window/stretch/mode="canvas_items"
 
 [dotnet]
 project/assembly_name="Joy"
+
+[internationalization]
+locale/include_text_server_data=true
 
 [rendering]
 renderer/rendering_method="gl_compatibility"

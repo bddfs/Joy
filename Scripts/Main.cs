@@ -68,7 +68,9 @@ public partial class Main : Control
     {
         for (int i = 0; i < 12; i++) await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
         await ToSignal(RenderingServer.Singleton, RenderingServer.SignalName.FramePostDraw);
-        var path = ProjectSettings.GlobalizePath("res://../.checks/" + name);
+        var directory = ProjectSettings.GlobalizePath("user://captures");
+        DirAccess.MakeDirRecursiveAbsolute(directory);
+        var path = System.IO.Path.Combine(directory, name);
         var error = GetViewport().GetTexture().GetImage().SavePng(path);
         GD.Print($"JOY_UI_CAPTURE | {path} | {error}");
         GetTree().Quit(error == Error.Ok ? 0 : 1);
@@ -94,7 +96,7 @@ public partial class Main : Control
     private void BuildTheme()
     {
         Theme = new Theme();
-        Theme.DefaultFont = new SystemFont { FontNames = new[] { "Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC" } };
+        Theme.DefaultFont = GD.Load<FontFile>("res://Assets/Fonts/NotoSansCJKsc-Regular.otf");
         Theme.DefaultFontSize = 17;
         Theme.SetColor("font_color", "Label", Ink);
         Theme.SetColor("font_color", "Button", Ink);
