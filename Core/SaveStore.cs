@@ -259,6 +259,9 @@ public sealed class SaveStore
                     item.AvailableDay >= 1 && item.SupportUsedDay >= 0 && item.SupportUsedDay <= state.Day, "实物状态无效。");
             if (item.Kind is "SealKit" or "SupplyCharge" or "SourceCase")
                 Require(item.Charges <= item.MaxCharges, "工具或供应耗材余量超过容量。");
+            if (item.Kind == WardClipCatalog.Kind)
+                Require(item.Id == WardClipCatalog.Id && item.MaxCharges == WardClipCatalog.MaximumCharges &&
+                        item.Charges <= item.MaxCharges, "护符夹实例或整局余量无效。");
             OptionalReference(item.NodeId, nodes, "实物地点"); OptionalReference(item.ContractNodeId, nodes, "实物合同");
             OptionalReference(item.InstalledNodeId, nodes, "实物安装地点");
             Require(item.Location == ItemLocation.Installed ? !string.IsNullOrEmpty(item.InstalledNodeId) :
