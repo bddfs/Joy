@@ -8,7 +8,7 @@ void Check(bool condition, string description)
 }
 foreach (var suite in new (string Name, Action<Action<bool, string>> Run)[]
 {
-    ("City", CityTests.Run), ("M2 City", M2CityTests.Run), ("Field", FieldTests.Run), ("M2 Field", M2FieldTests.Run), ("Save", SaveTests.Run), ("Integration", IntegrationTests.Run), ("M2 integration", M2IntegrationTests.Run)
+    ("City", CityTests.Run), ("M2 City", M2CityTests.Run), ("Field", FieldTests.Run), ("M2 Field", M2FieldTests.Run), ("Disturbance", DisturbanceTests.Run), ("Save", SaveTests.Run), ("Integration", IntegrationTests.Run), ("M2 integration", M2IntegrationTests.Run)
 })
 {
     int before = passed;

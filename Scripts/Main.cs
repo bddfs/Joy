@@ -321,7 +321,7 @@ public partial class Main : Control
         left.Body.AddChild(Text(site.Name, 26));
         left.Body.AddChild(Text($"第 {f.Round} / {f.RoundLimit} 轮\n行动 {f.Actions} / 3", 24, Mint));
         left.Body.AddChild(Text($"心志  {f.Will} / {f.MaxWill}\n护符  {f.Wards} / 3    异动  {f.Disturbance} / 8\n灯光  {(f.Light ? "亮" : "灭")}    墨水  {f.Ink}\n现场零钱  {f.Coins}", 18));
-        left.Body.AddChild(Text("异动达 8：立即损失 3 心志并回落 4；护符不能抵挡。", 13, Amber));
+        left.Body.AddChild(Text("异动达 8：立即损失 3 心志并回落到 4；护符不能抵挡。", 13, Amber));
         left.Body.AddChild(new HSeparator());
         left.Body.AddChild(Text("当前模仿参考", 15, Mint));
         left.Body.AddChild(Text(f.MimicReference is { } reference ? CardCatalog.Get(reference).Name + " · 作用于 " + room.Name : "尚无参考", 17));
