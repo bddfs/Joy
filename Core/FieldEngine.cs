@@ -325,12 +325,13 @@ public sealed class FieldEngine
                 if (!unknown && will <= 0) return new ActionPreview(true, 0, string.Join("\n", lines.Append("将心志归零，立即失败。")), true);
             }
         lines.Add("异动：+1。");
-        if (!unknown) disturbance++;
-        while (!unknown && disturbance >= 8)
+        if (!unknown)
         {
-            disturbance -= 4; will -= 3;
-            lines.Add("阈值袭击：心志 −3，异动 −4；护符不能抵挡。");
-            if (will <= 0) break;
+            var change = ResolveDisturbance(disturbance, 1);
+            disturbance = change.Value;
+            will = Math.Max(0, will - change.Damage);
+            if (change.Damage > 0)
+                lines.Add("阈值袭击：心志 −3，异动回落到 4；护符不能抵挡。");
         }
         if (!unknown && will <= 0) lines.Add("将心志归零，立即失败。");
         else if (Field.Round >= Field.RoundLimit) lines.Add(Room.IsEntrance ? "最后撤离机会：现在可以先免费撤离；结束本轮会封门失败。" : "本轮结束封门失败；必须在结束前返回入口撤离。");
@@ -338,7 +339,7 @@ public sealed class FieldEngine
         lines.Add("相关已知不触发");
         lines.Add(Field.Light ? "搜查、移动等行动行为不由结束本轮自动产生。" : "当前未点灯，不产生灯光结束事件；搜查、移动等行为也不发生。");
         lines.Add("尚不确定");
-        if (unknown) lines.Add("尚有未确认守则；灯光阶段后异动总量和护符余量只能按条件判断。达到 8 时立即袭击、损 3 心志并回落 4；不承诺最终净损失。");
+        if (unknown) lines.Add("尚有未确认守则；灯光阶段后异动总量和护符余量只能按条件判断。达到 8 时立即袭击、损 3 心志并回落到 4；不承诺最终净损失。");
         else lines.Add($"预计轮末心志 {Math.Max(0, will)}、护符 {wards}、异动 {disturbance}。" + (unconfirmed ? "尚有未确认规则，但本步没有产生其可能响应的灯光结束事件。" : ""));
         return new ActionPreview(true, 0, string.Join("\n", lines), (!unknown && will <= 0) || Field.Round >= Field.RoundLimit);
     }
@@ -558,13 +559,22 @@ public sealed class FieldEngine
 
     private void AddDisturbance(int amount)
     {
-        Field.Disturbance = Math.Max(0, Field.Disturbance + amount);
-        Log($"异动 {(amount >= 0 ? "+" : "")}{amount} → {Field.Disturbance}。");
-        while (Field.Disturbance >= 8 && !Field.Finished)
+        var change = ResolveDisturbance(Field.Disturbance, amount);
+        Log($"异动 {(amount >= 0 ? "+" : "")}{amount} → {Math.Max(0, Field.Disturbance + amount)}。");
+        Field.Disturbance = change.Value;
+        if (change.Damage > 0 && !Field.Finished)
         {
-            Field.Disturbance -= 4;
-            Damage(3, "异动阈值袭击（不可用护符抵挡）");
+            Log("异动达到阈值，回落到 4。");
+            Damage(change.Damage, "异动阈值袭击（不可用护符抵挡）");
         }
+    }
+
+    // Each individual increase resolves once; excess disturbance is discarded.
+    // Execution and both previews share this rule to keep their outcomes aligned.
+    private static (int Value, int Damage) ResolveDisturbance(int current, int amount)
+    {
+        int value = Math.Max(0, current + amount);
+        return value >= 8 ? (4, 3) : (value, 0);
     }
 
     private void Damage(int amount, string source)
@@ -778,8 +788,13 @@ public sealed class FieldEngine
         will = Math.Clamp(will - rule.WillDamage, 0, Field.MaxWill);
         lines.Add($"已知规则：{rule.Answer}；{ConsequenceText(rule)}。");
         if (will <= 0) return;
-        disturbance = Math.Max(0, disturbance + rule.DisturbanceGain);
-        while (disturbance >= 8 && will > 0) { disturbance -= 4; will -= 3; lines.Add("规则引发即时异动袭击：心志 −3，护符不可抵挡。"); }
+        var change = ResolveDisturbance(disturbance, rule.DisturbanceGain);
+        disturbance = change.Value;
+        if (change.Damage > 0)
+        {
+            will = Math.Max(0, will - change.Damage);
+            lines.Add("规则引发即时异动袭击：心志 −3，异动回落到 4；护符不可抵挡。");
+        }
     }
 
     private static string ConsequenceText(RuleState rule) =>
