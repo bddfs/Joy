@@ -61,7 +61,7 @@ public static class WorldFactory
         mirrorRoom.Description = "档案柜只给一次寻物记录，定位第二容器；第一次搜查不会直接发现或领取合同物。";
         var safeRoom = hotel.Rooms.First(r => r.Id == "hotel-room2");
         safeRoom.Name = "安全值班室"; safeRoom.AllowsKnock = false;
-        safeRoom.Description = "不在镜中住客的作用房间内；一份真实便条库存可用于搜查参考。";
+        safeRoom.Description = "不在镜中住客的作用房间内；先有一份真实便条库存可用于搜查参考，再有一件可选誊写护符夹。每份须分别搜查，不会刷新。";
         var annex = hotel.Rooms.First(r => r.Id == "hotel-annex");
         annex.Name = "未拼接的镜面侧房"; annex.IsMirrorRoom = true;
         annex.Description = $"沿用同一镜中住客实例；一盏唯一侧房灯，占 1 格，已封装出售报价固定为 {lampPrice}。放房、往返、搜查、封装仍须实际付费。";
@@ -72,6 +72,9 @@ public static class WorldFactory
         AddTarget(state, "source", "source-box", "源头红箱", 3);
         state.Items.Add(new ItemState { Id = "safe-note", Name = "值班便条", Kind = "Record", NodeId = "hotel", RoomId = "hotel-room2", Size = 1,
             Description = "安全房的一份真实库存，无现金奖励，无需封装；重访不刷新。" });
+        state.Items.Add(new ItemState { Id = WardClipCatalog.Id, Name = WardClipCatalog.Name, Kind = WardClipCatalog.Kind,
+            NodeId = "hotel", RoomId = "hotel-room2", Size = 1, Sealed = true, RequiresSealing = false, Value = 0,
+            Charges = WardClipCatalog.MaximumCharges, MaxCharges = WardClipCatalog.MaximumCharges, Description = WardClipCatalog.Description });
         state.Items.Add(new ItemState { Id = "lamp", Name = "侧房灯", Kind = "Lamp", NodeId = "hotel", RoomId = "hotel-annex", RequiresSealing = true,
             Size = 1, Value = lampPrice, Description = $"唯一灯具，封装需隔离工具 1 次；公开固定报价 {lampPrice}。可出售、安装或保留未封装暂存，不能同时处置。" });
         state.Items.Add(new ItemState { Id = "seal-a", Name = "便携隔离工具", Kind = "SealKit", Location = ItemLocation.Warehouse, Charges = 2, MaxCharges = 2,

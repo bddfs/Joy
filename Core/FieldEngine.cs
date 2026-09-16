@@ -82,11 +82,15 @@ public sealed class FieldEngine
                 : action.AcceptItem ? "搜索尚未发现的真实库存；可容纳时入包，否则留在原房。" : "执行搜查并发现物品，拒绝入包；物品留在原房，不产生获得事件。");
             if (command != CardKind.Knock)
                 parts.Add($"本房本出勤正常搜查次数：{NormalSearchCount(Room.Id)} → {NormalSearchCount(Room.Id) + (action.Card == CardKind.Mimic ? 0 : 1)}；模仿不计正常行为次数。");
+            if (!UsesArchive(action) && SearchTarget(action) is { Kind: WardClipCatalog.Kind } candidate)
+                parts.Add($"公开装备候选：{candidate.Name} · 占 {candidate.Size} 格 · 余量 {candidate.Charges}/{candidate.MaxCharges}\n{candidate.Description}\n可选择拒绝入包，实物留在原房；取得当次不触发装备。");
         }
         else if (action.Kind == FieldActionKind.Pickup)
         {
             var item = state.Item(action.TargetId);
             parts.Add($"拾取 {item.Name}，占 {item.Size} 格；背包 {Backpack().Sum(i => i.Size)}/{Field.Capacity}。");
+            if (item.Kind == WardClipCatalog.Kind)
+                parts.Add($"装备余量 {item.Charges}/{item.MaxCharges}\n{item.Description}");
         }
         else if (action.Kind == FieldActionKind.Drop) parts.Add("放回当前房间；不恢复库存、发现奖励或实例次数。");
         else if (action.Kind == FieldActionKind.Seal || command == CardKind.Seal)
@@ -100,6 +104,18 @@ public sealed class FieldEngine
             parts.Add($"模仿参考：{CardCatalog.Get(command!.Value).Name}；不产生原行为标签，仍产生实际结果事件；本次出勤耗尽。");
         if (command == CardKind.Rest) parts.Add($"本房休息剩余 {2 - Room.RestUses} 次，普通和模仿共用。");
         if (command == CardKind.Ward) parts.Add($"护符 {Field.Wards}/3。");
+        if (action.Kind == FieldActionKind.Search || command == CardKind.Search)
+        {
+            var clip = Backpack().FirstOrDefault(i => i.Kind == WardClipCatalog.Kind);
+            if (clip is not null)
+            {
+                parts.Add("装备修正 · " + clip.Name);
+                parts.Add(WardClipFor(action) is not null
+                    ? $"正常搜查前：护符 0 → 1；消耗墨水 1（{Field.Ink} → {Field.Ink - 1}）、装备用量 1（{clip.Charges} → {clip.Charges - 1}）。先获得护符，再结算规则；没有反噬也照常消耗。"
+                    : $"本步不触发：仅正常搜查前护符为 0、墨水至少 1、装备有余量时生效；模仿不触发。当前墨水 {Field.Ink}、护符 {Field.Wards}、装备 {clip.Charges}/{clip.MaxCharges}。");
+                parts.Add("余量属于该唯一实物，整局不补充；可取消本动作或先放下装备再搜查。");
+            }
+        }
         var projection = ProjectAction(action);
         parts.Add("已知会触发");
         parts.AddRange(projection.Triggers.Count > 0 ? projection.Triggers : new[] { "本步没有已确认且满足条件的规则后果。" });
@@ -125,6 +141,8 @@ public sealed class FieldEngine
         if (!validation.Success) return validation;
         var command = ResolveCommand(action);
         var beforeLight = Field.Light;
+        // Snapshot before resolving acquisition: a newly found clip cannot protect its own search.
+        var wardClip = WardClipFor(action);
         var mimicking = action.Kind == FieldActionKind.PlayCard && action.Card == CardKind.Mimic;
         var triggered = new HashSet<string>();
         Field.Actions -= Cost(action);
@@ -153,6 +171,14 @@ public sealed class FieldEngine
             var events = new Events { BeforeLight = beforeLight };
             if (action.Kind == FieldActionKind.Search || command is CardKind.Search or CardKind.Knock)
             {
+                if (wardClip is not null)
+                {
+                    Field.Ink--;
+                    wardClip.Charges--;
+                    Field.Wards++;
+                    Field.TriggeredEffects.Add($"ward-clip:{wardClip.Id}:sortie:{Field.SortieId}:remaining:{wardClip.Charges}");
+                    Log($"基础效果：正常搜查；装备来源：{wardClip.Name}。规则结算前护符 0 → 1；消耗墨水 1（剩 {Field.Ink}）、装备 1 次（剩 {wardClip.Charges}/{wardClip.MaxCharges}）。无反噬也扣费；模仿不触发，余量整局不补充。");
+                }
                 events.Searched = !mimicking && command != CardKind.Knock;
                 events.Knocked = !mimicking && command == CardKind.Knock;
                 int beforeCount = NormalSearchCount(Room.Id);
@@ -489,6 +515,8 @@ public sealed class FieldEngine
 
     private ItemState? SearchTarget(FieldAction action) => Room.HasArchiveCabinet && !Room.ContainerLocated ? null : state.Items.FirstOrDefault(i =>
         i.NodeId == Field.NodeId && i.RoomId == Room.Id && i.Location == ItemLocation.Room && !i.Discovered &&
+        (i.Kind != WardClipCatalog.Kind || !state.Items.Any(prior => prior.Id == "safe-note" && !prior.Discovered &&
+            prior.Location == ItemLocation.Room && prior.NodeId == i.NodeId && prior.RoomId == i.RoomId)) &&
         (string.IsNullOrEmpty(action.TargetId) || i.Id == action.TargetId));
 
     private ItemState? SealTarget(FieldAction action) => Backpack().FirstOrDefault(i => !i.Sealed && (i.Kind is "Anomaly" or "Lamp" || i.RequiresSealing) &&
@@ -657,6 +685,16 @@ public sealed class FieldEngine
         }
     }
 
+    // Public conditions only; never consult a rule's hidden trigger or eventual consequence.
+    private ItemState? WardClipFor(FieldAction action)
+    {
+        bool normalSearch = action.Kind == FieldActionKind.Search ||
+            (action.Kind == FieldActionKind.PlayCard && action.Card == CardKind.Search);
+        return normalSearch && Field.Wards == 0 && Field.Ink > 0
+            ? Backpack().FirstOrDefault(i => i.Kind == WardClipCatalog.Kind && i.Charges > 0)
+            : null;
+    }
+
     private ActionProjection ProjectAction(FieldAction action)
     {
         var result = new ActionProjection { Will = Field.Will, Wards = Field.Wards, Disturbance = Field.Disturbance };
@@ -677,13 +715,14 @@ public sealed class FieldEngine
         if (command == CardKind.Light || action.Kind == FieldActionKind.SupportLight) result.Disturbance = Math.Max(0, result.Disturbance - 1);
         if (rest) result.Will = Math.Min(Field.MaxWill, result.Will + 2);
         if (command == CardKind.Ward) result.Wards = Math.Min(3, result.Wards + 1);
+        if (WardClipFor(action) is not null) result.Wards++;
 
         var unknown = ApplicableRules().Where(r => !r.Confirmed).ToList();
         result.Exact = unknown.Count == 0;
         if (unknown.Count > 0)
         {
             result.Uncertainties.Add("仍有未确认守则。仅依据已有事实提示不确定性，不提供隐藏真值或最终净损失。");
-            if (Field.Wards > 0)
+            if (result.Wards > 0)
                 result.Uncertainties.Add("已知与未知后果可能按固定顺序共用护符；只有结算到该项时尚有护符，才取消该项可抵挡后果。");
             foreach (var rule in unknown.Where(r => r.EvidenceFound)) result.Uncertainties.Add("可靠记录：" + rule.Clue);
         }

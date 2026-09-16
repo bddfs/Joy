@@ -427,7 +427,10 @@ public partial class Main : Control
         }
         var execute = Button(_pendingEndRound ? "执行轮末结算 →" : "执行选定行动 →", ExecuteSelected, true);
         execute.Disabled = _pendingEndRound ? !engine.PreviewEndRound().Allowed : _pendingAction is null || !engine.Preview(_pendingAction).Allowed;
-        right.AddChild(execute);
+        var actionControls = new HBoxContainer(); right.AddChild(actionControls);
+        execute.SizeFlagsHorizontal = SizeFlags.ExpandFill; actionControls.AddChild(execute);
+        var cancel = Button("取消", () => { _pendingAction = null; _pendingEndRound = false; Render(); });
+        cancel.Disabled = _pendingAction is null && !_pendingEndRound; actionControls.AddChild(cancel);
         var tabs = new HBoxContainer(); right.AddChild(tabs);
         foreach (var (id, name) in new[] { ("evidence", "证据"), ("bag", "背包"), ("log", "日志") })
         {
@@ -448,13 +451,17 @@ public partial class Main : Control
             if (!string.IsNullOrEmpty(f.AssignedLightSupportId)) details.AddChild(ActionButton(f.LightSupportUsed ? "点灯支援已使用" : "使用驻点点灯支援 · 0", new FieldAction { Kind = FieldActionKind.SupportLight }));
             foreach (var item in bag)
             {
-                details.AddChild(Text(item.Name + $" · {item.Size} 格\n" + (item.RequiresSealing ? item.Sealed ? "已封装" : "未封装" : item.Kind == "SealKit" ? $"余量 {item.Charges} / {item.MaxCharges}" : "随行工具"), 15));
+                details.AddChild(Text(item.Name + $" · {item.Size} 格\n" + (item.RequiresSealing ? item.Sealed ? "已封装" : "未封装" : item.Kind is "SealKit" or WardClipCatalog.Kind ? $"余量 {item.Charges} / {item.MaxCharges}" : "随行工具"), 15));
                 details.AddChild(Text(item.Description, 13, Muted));
                 if (!item.Sealed && item.RequiresSealing) details.AddChild(ActionButton("基础封装 · 2", new FieldAction { Kind = FieldActionKind.Seal, TargetId = item.Id }));
                 details.AddChild(ActionButton("放回当前房间", new FieldAction { Kind = FieldActionKind.Drop, TargetId = item.Id }));
             }
             foreach (var item in g.Items.Where(i => i.Location == ItemLocation.Room && i.RoomId == room.Id && i.NodeId == site.Id && i.Discovered))
+            {
+                if (item.Kind == WardClipCatalog.Kind)
+                    details.AddChild(Text($"{item.Name} · 余量 {item.Charges} / {item.MaxCharges}\n{item.Description}", 13, Muted));
                 details.AddChild(ActionButton("拾取 " + item.Name, new FieldAction { Kind = FieldActionKind.Pickup, TargetId = item.Id }));
+            }
         }
         else
         {
@@ -633,7 +640,7 @@ public partial class Main : Control
         {
             inventory.Body.AddChild(Text("随行配置 / " + _game.Node(task.NodeId).Name, 22, Mint));
             inventory.Body.AddChild(Text("按实物选择；空配装可以回访并拾回遗落工具。", 14, Muted));
-            foreach (var tool in _game.Items.Where(i => i.Location == ItemLocation.Warehouse && i.Kind is "SealKit" or "SourceCase" or "RevealLens"))
+            foreach (var tool in _game.Items.Where(i => i.Location == ItemLocation.Warehouse && i.Kind is "SealKit" or "SourceCase" or "RevealLens" or WardClipCatalog.Kind))
             {
                 bool carried = task.ToolIds.Contains(tool.Id);
                 var toggle = Button((carried ? "✓ 带入 " : "○ 加入 ") + tool.Name + $" · 余 {tool.Charges}", () =>
@@ -654,6 +661,8 @@ public partial class Main : Control
             inventory.Body.AddChild(Text(item.Name + (reservedTask is null ? "" : " · 已预留"), 20, Mint));
             if (reservedTask is not null) inventory.Body.AddChild(Text("用于 " + _game.Node(reservedTask.NodeId).Name + " · " + JobLabel(reservedTask.Kind), 14, Amber));
             inventory.Body.AddChild(Text(item.Description, 15));
+            if (item.Kind == WardClipCatalog.Kind)
+                inventory.Body.AddChild(Text($"整局余量 {item.Charges} / {item.MaxCharges} · 占 {item.Size} 格 · 可用日 {item.AvailableDay}\n仅供手操配装；归库、换队和读档均不补次数。", 16, Amber));
             if (item.Kind == "SealKit")
             {
                 inventory.Body.AddChild(Text($"余量 {item.Charges} / {item.MaxCharges} · 可用日 {item.AvailableDay}", 16, Amber));

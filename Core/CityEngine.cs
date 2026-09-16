@@ -524,6 +524,8 @@ public sealed class CityEngine
             foreach (var id in task.ToolIds)
             {
                 var tool = state.Items.FirstOrDefault(i => i.Id == id);
+                if (tool?.Kind == WardClipCatalog.Kind && task.Kind != JobKind.Manual)
+                    return ActionResult.Fail("誊写护符夹仅供手操出勤使用；委派和工程不能携带或消耗这件装备。");
                 if (tool is null || tool.Location != ItemLocation.Warehouse || (tool.Charges <= 0 && !(task.Kind == JobKind.Supply && tool.Id == task.TargetItemId)) ||
                     tool.AvailableDay > state.Day || tool.Disposition != "" || tool.ReservedBy is not null)
                     return ActionResult.Fail($"{tool?.Name ?? "所选工具"} 不在可用仓库、已耗尽、尚未生效或已预留处置。");
