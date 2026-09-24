@@ -1,0 +1,11 @@
+Built-in image_gen edit; original generated board as reference; 2026-09-24.
+
+Edit this original game art direction board. Preserve its overall 16:9 composition, three panels, realistic urban nightscape, sparse cosmic starfield, warm hotel corridor and mirror anomaly, three card subjects, all seven named city nodes, quiet black/ivory palette, and bottom swatches.
+
+Refinement goal: make the design language unmistakably contemporary, minimal and functional rather than antique/gothic. Change all large Chinese headlines and card names to a clean modern sans-serif Chinese typeface, medium weight, no calligraphy or serifs. Replace ornate gold card corner flourishes with simple straight thin ivory borders and a tiny neutral square index mark. Keep the desk lamp and hotel brass materials physically warm; remove gold decoration only from UI frames. Keep effects-text areas blank. Use flat dark opaque card text surfaces.
+
+Text: retain only "异常回收公司", "美术方向提案 01", section labels "城市经营", "现场探索", "行动卡牌", node labels "公司总部", "暮灯旅馆", "北街枢纽", "白榆医院", "红箱源头", "南街枢纽", "公共协作点", and card labels "调查", "点灯", "模仿". Remove ALL little invented Chinese slogans and English microcopy. Leave that space clean and dark. Small footer may read exactly "风格概念图 · 非实机界面".
+
+Correct just the metro network: the northern route must be 公司总部—暮灯旅馆—北街枢纽—白榆医院—红箱源头. Remove the currently erroneous direct connection 北街枢纽—红箱源头 and draw 北街枢纽—白榆医院 clearly. Preserve the southern route 公司总部—南街枢纽—公共协作点—白榆医院. Keep seven nodes, seven links, no extra connections.
+
+Do not add new objects, controls, icons, planets, figures, numbers or mechanics. Maintain the same rich photographic scene details, subtle cosmic dust, excellent negative space and beautiful overall mood. This is a revised visual concept, not a screenshot.
