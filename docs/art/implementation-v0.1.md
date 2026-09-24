@@ -17,6 +17,8 @@
 
 ## P1–P5 交付组成
 
+Windows x64 本地试玩 ZIP 已由源码提交 `afd9c0bf3043c984230993667e99baa5913f0344` 导出。包内自带 .NET 8.0.31；新目录解压后的198文件逐项校验一致。清空 DOTNET_ROOT / DOTNET_ROOT_X64 并从包外目录启动，标题及150%城市、现场、运输、设置五个场景均退出0、无运行错误，截图与源码版逐像素相同。包大小97,395,813字节，完整校验与结果见 [package-validation.json](../../output/art-ui-v01/qa/package-validation.json)。本轮交付本地ZIP与GitHub实现分支，没有创建新的GitHub Release。
+
 | 包/资源 | 本次实现 | 证据与边界 |
 | --- | --- | --- |
 | P1 / VIS-CITY-01、VIS-NODE-01 | 城市背景、7 建筑切片、真实七节点七边、文字归属/营业/队伍/威胁、可选道路与封控标记 | [Main.City.cs](../../Scripts/Main.City.cs)、[CityPresentation.cs](../../Scripts/CityPresentation.cs)、[NetworkMap.cs](../../Scripts/NetworkMap.cs)。节点资料与标记为可编辑控件；三档截图/经营状态已留证并目视核对。 |

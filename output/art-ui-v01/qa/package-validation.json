@@ -1,0 +1,61 @@
+{
+  "version": "0.3.0-art.1",
+  "sourceCommit": "afd9c0bf3043c984230993667e99baa5913f0344",
+  "platform": "windows-x64",
+  "archive": "Joy-v0.3.0-art.1-windows-x64.zip",
+  "bytes": 97395813,
+  "sha256": "e03afa609bb2e086752fe56eca3ab5a796926c3b25adb474c2044b16d74f0931",
+  "selfContained": true,
+  "dotnetRuntime": "8.0.31",
+  "extractedFilesMatched": 198,
+  "regressionChecksPassed": 928,
+  "regressionChecksFailed": 0,
+  "smokeTests": [
+    {
+      "case": "title",
+      "scale": "1.00",
+      "exitCode": 0,
+      "runtimeErrors": false,
+      "matchesSourcePixels": true,
+      "sha256": "cefebd4854d91e0195dc425cf5209af20fcd6a0f9aa9480f551fb400cb70adbc"
+    },
+    {
+      "case": "city",
+      "scale": "1.50",
+      "exitCode": 0,
+      "runtimeErrors": false,
+      "matchesSourcePixels": true,
+      "sha256": "02e157f366863d646f6c0d10746e2b9a50a8cc2e7dbd7a42a59f3eb623f17511"
+    },
+    {
+      "case": "field",
+      "scale": "1.50",
+      "exitCode": 0,
+      "runtimeErrors": false,
+      "matchesSourcePixels": true,
+      "sha256": "0e9f43e86bfce3608031ffeac6140852f66d16fafd2c29f72095babf02cf59a4"
+    },
+    {
+      "case": "transport",
+      "scale": "1.50",
+      "exitCode": 0,
+      "runtimeErrors": false,
+      "matchesSourcePixels": true,
+      "sha256": "c87cabcd13223fec8296439c78b96e4b12c87932efafd89a2750bed6ef9f6610"
+    },
+    {
+      "case": "settings",
+      "scale": "1.50",
+      "exitCode": 0,
+      "runtimeErrors": false,
+      "matchesSourcePixels": true,
+      "sha256": "76e6e59db8978530ba59e29e1e55470f4a325061728b9fd74bffda662e7b6f65"
+    }
+  ],
+  "notes": [
+    "Extracted into a new directory; all 198 package files match the pre-archive files.",
+    "Smoke launches used a working directory outside the package and cleared DOTNET_ROOT and DOTNET_ROOT_X64.",
+    "Five rendered export screenshots match the archived source-client screenshots pixel-for-pixel.",
+    "This is a locally delivered ZIP, not a published GitHub Release. Human visual approval and macOS validation remain pending."
+  ]
+}
