@@ -1,0 +1,252 @@
+{
+  "canvas": {
+    "width": 1920,
+    "height": 1080
+  },
+  "scale": 1.5,
+  "staticMode": true,
+  "grayscale": false,
+  "layoutMinimum": {
+    "width": 1084,
+    "height": 439
+  },
+  "labels": [
+    {
+      "text": "\u5F02\u5E38\u56DE\u6536\u516C\u53F8",
+      "fontSize": 44,
+      "characters": 6
+    },
+    {
+      "text": "A R B  /  \u96FE\u6E2F\u5206\u5C40",
+      "fontSize": 20,
+      "characters": 14
+    },
+    {
+      "text": "\u7ECF\u8425\u65E5",
+      "fontSize": 20,
+      "characters": 3
+    },
+    {
+      "text": "05 / 05",
+      "fontSize": 40,
+      "characters": 7
+    },
+    {
+      "text": "\u516C\u53F8\u8D44\u91D1",
+      "fontSize": 20,
+      "characters": 4
+    },
+    {
+      "text": "11",
+      "fontSize": 40,
+      "characters": 2
+    },
+    {
+      "text": "\u73B0\u573A\u72B6\u6001",
+      "fontSize": 20,
+      "characters": 4
+    },
+    {
+      "text": "\u7ED3\u7B97\u5931\u8D25",
+      "fontSize": 40,
+      "characters": 4
+    },
+    {
+      "text": "\u5C1A\u672A\u4FDD\u5B58",
+      "fontSize": 21,
+      "characters": 4
+    },
+    {
+      "text": "\u8FDC\u5F81\u6682\u505C",
+      "fontSize": 22,
+      "characters": 4
+    },
+    {
+      "text": "\u6BCF\u4E00\u6B21\u5931\u8D25\uFF0C\u90FD\u5E94\u8BE5\u7559\u4E0B\u53EF\u9760\u7684\u8BB0\u5F55\u3002",
+      "fontSize": 60,
+      "characters": 17
+    },
+    {
+      "text": "\u671F\u9650\u5DF2\u5230\uFF1A\u6E90\u5934\u672A\u5904\u7F6E\uFF0C\u6709\u6548\u8425\u4E1A 0/2\u3002",
+      "fontSize": 36,
+      "characters": 20
+    },
+    {
+      "text": "\u7B2C 5 \u65E5 \u00B7 \u8D44\u91D1 11\n\u5DF2\u786E\u8BA4\u5B88\u5219 0 \u6761\n\u5DF2\u4EA4\u4ED8\u5B9E\u7269 0 \u4EF6\n\u7D27\u6025\u652F\u63F4 \u672A\u4F7F\u7528",
+      "fontSize": 33,
+      "characters": 42
+    },
+    {
+      "text": "\u5F53\u524D\u6784\u5EFA\u5230\u6B64\u5B8C\u6210\u5355\u57CE\u9A8C\u8BC1\u3002\u4E09\u57CE\u4EA4\u63A5\u3001\u8FDE\u7EED\u751F\u6210\u9A8C\u8BC1\u4E0E\u8DE8\u5C40\u6210\u957F\u5C1A\u672A\u63A5\u5165\uFF0C\u672C\u7248\u4E0D\u4F1A\u5C06\u5355\u57CE\u6210\u529F\u8BB0\u4F5C\u5B8C\u6574\u8FDC\u5F81\u80DC\u5229\u3002",
+      "fontSize": 27,
+      "characters": 52
+    },
+    {
+      "text": "\u6700\u540E\u4E00\u65E5 / \u5B9E\u9645\u7ED3\u7B97\u987A\u5E8F",
+      "fontSize": 36,
+      "characters": 13
+    },
+    {
+      "text": "01  \u5F52\u961F\u3001\u771F\u5B9E\u6D88\u8017\u4E0E\u8FD0\u8F93  \u00B7  \u4F59\u989D 11 \u2192 11",
+      "fontSize": 27,
+      "characters": 29
+    },
+    {
+      "text": "02  \u8BC1\u636E\u5F52\u6863\u4E0E\u5408\u540C\u4EA4\u4ED8  \u00B7  \u4F59\u989D 11 \u2192 13",
+      "fontSize": 27,
+      "characters": 28
+    },
+    {
+      "text": "03  \u5DE5\u7A0B\u4E0E\u5904\u7F6E\u5B8C\u6210  \u00B7  \u4F59\u989D 13 \u2192 13",
+      "fontSize": 27,
+      "characters": 26
+    },
+    {
+      "text": "04  \u6668\u95F4\u8D44\u683C\u6536\u5165\u4E0E\u5FC5\u8981\u8D39\u7528  \u00B7  \u4F59\u989D 13 \u2192 11",
+      "fontSize": 27,
+      "characters": 30
+    },
+    {
+      "text": "05  \u5171\u540C\u5FEB\u7167\u6269\u5F20\u4E0E\u5C01\u63A7  \u00B7  \u4F59\u989D 11 \u2192 11",
+      "fontSize": 27,
+      "characters": 28
+    },
+    {
+      "text": "06  \u4EA4\u63A5\u3001\u5931\u8D25\u4E0E\u671F\u9650\u68C0\u67E5  \u00B7  \u4F59\u989D 11 \u2192 11",
+      "fontSize": 27,
+      "characters": 29
+    },
+    {
+      "text": "07  \u5B9E\u9645\u8FDB\u5165\u7684\u65B0\u9636\u6BB5  \u00B7  \u4F59\u989D 11 \u2192 11",
+      "fontSize": 27,
+      "characters": 27
+    },
+    {
+      "text": "\u4EE5\u4E0B\u8BB0\u5F55\u6309\u539F\u987A\u5E8F\u5C55\u793A\uFF1B\u56DE\u67E5\u4E0D\u4F1A\u6539\u53D8\u7EC8\u5C40\u3001\u73B0\u91D1\u6216\u5B9E\u7269\u3002",
+      "fontSize": 22,
+      "characters": 26
+    },
+    {
+      "text": "\u5148\u89C2\u5BDF\uFF0C\u518D\u5224\u65AD\u3002\u628A\u672A\u77E5\u7559\u5728\u6863\u6848\u91CC\u3002",
+      "fontSize": 21,
+      "characters": 17
+    },
+    {
+      "text": "M2 / ART\u201301",
+      "fontSize": 20,
+      "characters": 11
+    }
+  ],
+  "buttons": [
+    {
+      "text": "\u663E\u793A",
+      "enabled": true,
+      "x": 1584,
+      "y": 24,
+      "width": 88,
+      "height": 99,
+      "critical": false,
+      "insideCanvas": true
+    },
+    {
+      "text": "\u624B\u518C",
+      "enabled": true,
+      "x": 1696,
+      "y": 24,
+      "width": 88,
+      "height": 99,
+      "critical": false,
+      "insideCanvas": true
+    },
+    {
+      "text": "\u6807\u9898",
+      "enabled": true,
+      "x": 1808,
+      "y": 24,
+      "width": 88,
+      "height": 99,
+      "critical": false,
+      "insideCanvas": true
+    },
+    {
+      "text": "01  \u57CE\u5E02\u8C03\u5EA6",
+      "enabled": true,
+      "x": 24,
+      "y": 135,
+      "width": 187,
+      "height": 66,
+      "critical": false,
+      "insideCanvas": true
+    },
+    {
+      "text": "02  \u5B88\u5219\u6863\u6848",
+      "enabled": true,
+      "x": 221,
+      "y": 135,
+      "width": 187,
+      "height": 66,
+      "critical": false,
+      "insideCanvas": true
+    },
+    {
+      "text": "03  \u5DE5\u5177\u914D\u88C5",
+      "enabled": true,
+      "x": 418,
+      "y": 135,
+      "width": 187,
+      "height": 66,
+      "critical": false,
+      "insideCanvas": true
+    },
+    {
+      "text": "04  \u6536\u652F\u8BB0\u5F55",
+      "enabled": true,
+      "x": 615,
+      "y": 135,
+      "width": 187,
+      "height": 66,
+      "critical": false,
+      "insideCanvas": true
+    },
+    {
+      "text": "\u5B8C\u6574\u7ED3\u7B97\u65F6\u95F4\u7EBF",
+      "enabled": true,
+      "x": 40,
+      "y": 934,
+      "width": 228,
+      "height": 66,
+      "critical": false,
+      "insideCanvas": true
+    },
+    {
+      "text": "\u5168\u90E8\u8D44\u91D1\u6D41\u6C34",
+      "enabled": true,
+      "x": 280,
+      "y": 934,
+      "width": 200,
+      "height": 66,
+      "critical": false,
+      "insideCanvas": true
+    },
+    {
+      "text": "\u5B8C\u6574\u884C\u52A8\u8BB0\u5F55",
+      "enabled": true,
+      "x": 492,
+      "y": 934,
+      "width": 200,
+      "height": 66,
+      "critical": false,
+      "insideCanvas": true
+    },
+    {
+      "text": "\u8FD4\u56DE\u6807\u9898",
+      "enabled": true,
+      "x": 704,
+      "y": 934,
+      "width": 144,
+      "height": 66,
+      "critical": false,
+      "insideCanvas": true
+    }
+  ]
+}

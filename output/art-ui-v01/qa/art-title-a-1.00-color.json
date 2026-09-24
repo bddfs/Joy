@@ -1,0 +1,112 @@
+{
+  "canvas": {
+    "width": 1920,
+    "height": 1080
+  },
+  "scale": 1,
+  "staticMode": true,
+  "grayscale": false,
+  "layoutMinimum": {
+    "width": 515,
+    "height": 330
+  },
+  "labels": [
+    {
+      "text": "J O Y   /   FIELD OPERATIONS DIVISION",
+      "fontSize": 16,
+      "characters": 37
+    },
+    {
+      "text": "\u5F02\u5E38\u56DE\u6536\u516C\u53F8",
+      "fontSize": 60,
+      "characters": 6
+    },
+    {
+      "text": "\u628A\u672A\u77E5\u7559\u5728\u6863\u6848\u91CC\u3002\n\u628A\u5458\u5DE5\u5E26\u56DE\u5BB6\u3002",
+      "fontSize": 29,
+      "characters": 17
+    },
+    {
+      "text": "\u7ECF\u8425\u4E00\u5F20\u9010\u6E10\u4EAE\u8D77\u7684\u57CE\u5E02\u7F51\u7EDC\uFF0C\n\u6D3E\u51FA\u961F\u4F0D\u8C03\u67E5\u3001\u56DE\u6536\uFF0C\u518D\u4EB2\u81EA\u8D70\u8FDB\u89C4\u5219\u7684\u73B0\u573A\u3002",
+      "fontSize": 20,
+      "characters": 36
+    },
+    {
+      "text": "\u96FE\u6E2F\u5206\u5C40  /  \u65B0\u7684\u57CE\u5E02\u59D4\u6258",
+      "fontSize": 15,
+      "characters": 15
+    },
+    {
+      "text": "\u96FE\u6E2F / 5 \u4E2A\u7ECF\u8425\u65E5",
+      "fontSize": 30,
+      "characters": 11
+    },
+    {
+      "text": "\u76EE\u6807\uFF1A\u56DE\u6536\u5F02\u5E38\u6E90\u5934\uFF0C\u5E76\u8BA9 2 \u4E2A\u670D\u52A1\u70B9\u6709\u6548\u8425\u4E1A\u3002\n\n\u4F60\u6709 16 \u8D44\u91D1\u30016 \u540D\u5458\u5DE5\u548C\u6BCF\u5929 2 \u4E2A\u4E8B\u52A1\u4F4D\u3002\u6BCF\u4E2A\u7ECF\u8425\u65E5\u6700\u591A\u4EB2\u81EA\u6307\u6325\u4E00\u652F\u961F\u4F0D\u3002",
+      "fontSize": 19,
+      "characters": 67
+    },
+    {
+      "text": "\u9A8C\u8BC1\u79CD\u5B50\uFF08\u56FA\u5B9A\u57CE\u5E02\u9AA8\u67B6\uFF0C\u9690\u85CF\u5B9E\u4F8B\u4E0E\u62BD\u724C\u53EF\u53D8\uFF09",
+      "fontSize": 14,
+      "characters": 22
+    },
+    {
+      "text": "M2\uFF1A\u955C\u4E2D\u4F4F\u5BA2\u3001\u5171\u4EAB\u5C01\u88C5\u5DE5\u5177\u4E0E\u706F\u5177\u5904\u7F6E\u3002\u57FA\u7840\u573A\u666F\u7528\u4E8E\u6838\u5BF9\u4E94\u65E5\u8D44\u6E90\uFF1B\u4F20\u64AD\u538B\u529B\u53EF\u72EC\u7ACB\u5F00\u542F\u3002\u65E7\u7248\u5B58\u6863\u4FDD\u7559\u5728\u539F\u76EE\u5F55\u3002",
+      "fontSize": 14,
+      "characters": 54
+    }
+  ],
+  "buttons": [
+    {
+      "text": "\u706F\u5177\u516C\u5F00\u6536\u8D2D\u4EF7\uFF1A6 \u8D44\u91D1",
+      "enabled": true,
+      "x": 1402,
+      "y": 379,
+      "width": 478,
+      "height": 53,
+      "critical": false,
+      "insideCanvas": true
+    },
+    {
+      "text": "\u5F00\u542F\u72EC\u7ACB\u4F20\u64AD\u538B\u529B\u573A\u666F",
+      "enabled": true,
+      "x": 1402,
+      "y": 444,
+      "width": 478,
+      "height": 53,
+      "critical": false,
+      "insideCanvas": true
+    },
+    {
+      "text": "\u5F00\u59CB\u65B0\u5C40  \u2192",
+      "enabled": true,
+      "x": 1402,
+      "y": 509,
+      "width": 478,
+      "height": 53,
+      "critical": false,
+      "insideCanvas": true
+    },
+    {
+      "text": "\u64CD\u4F5C\u624B\u518C",
+      "enabled": true,
+      "x": 1402,
+      "y": 574,
+      "width": 478,
+      "height": 53,
+      "critical": false,
+      "insideCanvas": true
+    },
+    {
+      "text": "\u663E\u793A\u4E0E\u8F85\u52A9\u8BBE\u7F6E",
+      "enabled": true,
+      "x": 1402,
+      "y": 639,
+      "width": 478,
+      "height": 53,
+      "critical": false,
+      "insideCanvas": true
+    }
+  ]
+}

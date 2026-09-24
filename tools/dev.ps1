@@ -6,6 +6,11 @@ param(
 $ErrorActionPreference = 'Stop'
 $joyRepoPath = Split-Path -Parent $PSScriptRoot
 $joyWorkspacePath = Split-Path -Parent $joyRepoPath
+$joySearch = $joyRepoPath
+for ($joyLevel = 0; $joyLevel -lt 5 -and $joySearch; $joyLevel++) {
+    if (Test-Path -LiteralPath (Join-Path $joySearch 'tools\dotnet\dotnet.exe')) { $joyWorkspacePath = $joySearch; break }
+    $joySearch = Split-Path -Parent $joySearch
+}
 $joyPortableDotnet = Join-Path $joyWorkspacePath 'tools\dotnet'
 $joyPortableGodot = Join-Path $joyWorkspacePath 'tools\godot-4.7.2\Godot_v4.7.2-stable_mono_win64\Godot_v4.7.2-stable_mono_win64_console.exe'
 

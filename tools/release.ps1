@@ -6,16 +6,31 @@
 $ErrorActionPreference = 'Stop'
 $joyRepo = Split-Path -Parent $PSScriptRoot
 $joyWorkspace = Split-Path -Parent $joyRepo
-$joySdk = Join-Path $joyWorkspace 'tools\dotnet'
-$joyPortableEngine = Join-Path $joyWorkspace 'tools\godot-4.7.2\Godot_v4.7.2-stable_mono_win64\Godot_v4.7.2-stable_mono_win64_console.exe'
-if (Test-Path -LiteralPath (Join-Path $joySdk 'dotnet.exe')) {
+$joySdk = $null
+$joyPortableEngine = $null
+$joySearch = $joyRepo
+# Check the repository and at most four parents, including managed worktree layouts.
+for ($joyLevel = 0; $joyLevel -lt 5 -and $joySearch; $joyLevel++) {
+    $joySdkCandidate = Join-Path $joySearch 'tools\dotnet'
+    $joyEngineCandidate = Join-Path $joySearch 'tools\godot-4.7.2\Godot_v4.7.2-stable_mono_win64\Godot_v4.7.2-stable_mono_win64_console.exe'
+    if (!$joySdk -and (Test-Path -LiteralPath (Join-Path $joySdkCandidate 'dotnet.exe') -PathType Leaf)) {
+        $joySdk = $joySdkCandidate
+        $joyWorkspace = $joySearch
+    }
+    if (!$joyPortableEngine -and (Test-Path -LiteralPath $joyEngineCandidate -PathType Leaf)) { $joyPortableEngine = $joyEngineCandidate }
+    if ($joySdk -and $joyPortableEngine) { break }
+    $joyParent = Split-Path -Parent $joySearch
+    if ($joyParent -eq $joySearch) { break }
+    $joySearch = $joyParent
+}
+if ($joySdk) {
     $env:DOTNET_ROOT = $joySdk
     $env:DOTNET_ROOT_X64 = $joySdk
     $env:PATH = "$joySdk;$env:PATH"
 }
 $joyDotnet = (Get-Command dotnet -ErrorAction Stop).Source
 if (!$GodotPath) {
-    $GodotPath = if (Test-Path -LiteralPath $joyPortableEngine) { $joyPortableEngine }
+    $GodotPath = if ($joyPortableEngine) { $joyPortableEngine }
         elseif ($env:GODOT4) { $env:GODOT4 }
         else { (Get-Command godot -ErrorAction Stop).Source }
 }
@@ -33,8 +48,9 @@ try {
     if ($joyVersion -notmatch '^\d+\.\d+\.\d+(?:-[A-Za-z0-9.]+)?$') { throw 'Invalid project version.' }
     $joyCommit = (& git rev-parse HEAD).Trim()
     if ($LASTEXITCODE -ne 0) { throw 'Cannot resolve the source commit.' }
-    & git diff --quiet HEAD -- Core Scripts Scenes Assets Licenses tools/release.ps1 Joy.csproj project.godot export_presets.cfg
-    if ($LASTEXITCODE -ne 0) { throw 'Commit release source and configuration before packaging.' }
+    $joyDirty = @(& git status --porcelain --untracked-files=all -- Core Scripts Scenes Assets Licenses docs/art "docs/releases/v$joyVersion.md" README.md tools/release.ps1 Joy.csproj project.godot export_presets.cfg)
+    if ($LASTEXITCODE -ne 0) { throw 'Cannot inspect release source status.' }
+    if ($joyDirty.Count) { throw 'Commit release source, asset notices and configuration before packaging.' }
 
     $joyName = "Joy-v$joyVersion-windows-x64"
     $joyRun = Join-Path $OutputRoot ("release-v$joyVersion-" + [DateTime]::UtcNow.ToString('yyyyMMdd-HHmmss') + '-' + [Guid]::NewGuid().ToString('N').Substring(0, 6))
@@ -74,6 +90,26 @@ try {
     Copy-Item -LiteralPath (Join-Path $joyRuntimePackage 'THIRD-PARTY-NOTICES.TXT') -Destination (Join-Path $joyLicenses 'DotNet-THIRD-PARTY-NOTICES.txt')
     Copy-Item -LiteralPath (Join-Path $joyRepo "docs\releases\v$joyVersion.md") -Destination (Join-Path $joyPackage 'PLAYTEST.md')
 
+    # Explicit metadata allowlist: do not copy source trees, generation caches or QA output.
+    $joyArtDirectory = Join-Path $joyPackage 'Art'
+    New-Item -ItemType Directory -Path $joyArtDirectory -Force | Out-Null
+    $joyManifestPath = Join-Path $joyRepo 'docs\art\assets.json'
+    $joyArtManifest = Get-Content -LiteralPath $joyManifestPath -Raw -Encoding utf8 | ConvertFrom-Json
+    Copy-Item -LiteralPath $joyManifestPath -Destination (Join-Path $joyArtDirectory 'assets.json')
+    @"
+Joy AI 美术素材说明 / $($joyArtManifest.artVersion)
+
+候选状态：$($joyArtManifest.status)
+生成来源：$($joyArtManifest.rights.creation)
+参考来源：$($joyArtManifest.rights.reference)
+权利边界：$($joyArtManifest.rights.license)
+团队审美批准状态：$($joyArtManifest.rights.teamApproval)
+
+完整资产 ID、来源、生成记录及文件校验见 Art/assets.json。
+游戏素材由 Joy.pck 提供；清单中的源码和提示词路径对应源码仓库，不表示包内存在另一份实物或素材。
+本包仅附资产清单与本说明，不附开发缓存、生成缓存或整套开发工具。
+"@ | Set-Content -LiteralPath (Join-Path $joyLicenses 'AI-Art-NOTICE.txt') -Encoding utf8
+
     @"
 Joy v$joyVersion - Windows 64 位开发者试玩版
 
@@ -81,11 +117,14 @@ Joy v$joyVersion - Windows 64 位开发者试玩版
 请保留 Joy.pck、data_Joy_windows_x86_64 和其它随附文件。
 已包含 .NET 运行时；无需安装 Godot 编辑器、.NET SDK 或另行下载运行时。
 
-这是 M2 单城原型预发行版本。试玩内容、操作提示与反馈建议见 PLAYTEST.md，游戏内也有操作手册。
+这是接入 P1–P5 美术与界面候选的 M2 单城原型预发行版本，尚未获得最终人工审美批准。
+试玩内容、操作提示与反馈建议见 PLAYTEST.md，游戏内也有操作手册。
 存档自动保存在 %APPDATA%\Godot\app_userdata\Joy · 异常回收公司\profile-m2。
+兼容已有 v2 存档；历史 profile 目录保留、不混读。
 反馈时请附经营日、种子、操作顺序、截图及 build-info.json 中的 sourceCommit。
 
 包内中文字体采用 Noto Sans CJK。Godot、.NET 与字体许可见 Licenses 目录。
+资产清单见 Art/assets.json，AI 素材来源及权利说明见 Licenses/AI-Art-NOTICE.txt。
 项目与问题反馈：https://github.com/bddfs/Joy
 "@ | Set-Content -LiteralPath (Join-Path $joyPackage 'README.txt') -Encoding utf8
 
@@ -98,6 +137,8 @@ Joy v$joyVersion - Windows 64 位开发者试玩版
         godot = $joyEngineVersion
         dotnetRuntime = $joyRuntimeVersion
         selfContained = $true
+        artVersion = $joyArtManifest.artVersion
+        assetManifest = 'Art/assets.json'
     } | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $joyPackage 'build-info.json') -Encoding utf8
 
     $joyZip = Join-Path $joyRun "$joyName.zip"

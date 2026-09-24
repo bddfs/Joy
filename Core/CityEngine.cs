@@ -269,13 +269,18 @@ public sealed class CityEngine
         if (task is null) return ActionResult.Ok("没有待结转的手操任务。");
         var field = state.Field;
         if (field is null || field.AssignmentId != task.Id || !field.Finished) return ActionResult.Fail("手操尚未结束，必须撤离或完成失败结算。");
+        long returnLog = state.LogSequence;
         if (field.Escaped)
         {
             var returning = state.Items.Where(i => i.Location == ItemLocation.Backpack && i.OwnerId == task.Id).ToList();
             ApplyTransport(returning, task.Route.AsEnumerable().Reverse().ToList());
             foreach (var item in returning) { item.Location = ItemLocation.Warehouse; item.OwnerId = ""; item.ReservedBy = null; }
             if (returning.Count > 0) state.LastDaySummary.Add("成功带回：" + string.Join("、", returning.Select(i => i.Name + (i.RequiresSealing && !i.Sealed ? "（未封装暂存）" : ""))) + "；实物交付与处置尚未完成。");
-            if (field.Coins > 0) Pay(field.Coins, "现场零钱", $"{state.Node(task.NodeId).Name} 成功撤离");
+            if (field.Coins > 0)
+            {
+                Pay(field.Coins, "现场零钱", $"{state.Node(task.NodeId).Name} 成功撤离");
+                state.Record($"现场零钱入账：{state.Node(task.NodeId).Name} 成功撤离，到账 {field.Coins}，余额 {state.Money}。");
+            }
             task.Successful = true;
         }
         else
@@ -298,6 +303,9 @@ public sealed class CityEngine
         }
         task.Completed = true;
         ReleaseReservations(task);
+        // A manual return can precede SettleDay. Preserve only its actual new records even when the log is capped.
+        foreach (var line in state.Log.TakeLast((int)Math.Min(state.Log.Count, state.LogSequence - returnLog)))
+            state.LastDaySummary.Add("归队流水：" + line);
         state.LastCheckpoint = $"第 {state.Day} 日 · 出勤已结转，等待日结";
         return ActionResult.Ok("手操作业已结转；调查、合同与工程统一在日终归档结算。");
     }
@@ -305,12 +313,31 @@ public sealed class CityEngine
     public ActionResult SettleDay()
     {
         if (state.Phase != DayPhase.Executing) return ActionResult.Fail("只能对已锁定且尚未结算的经营日执行一次日结。");
+        // Presentation records are emitted by the actual pipeline, never by an animation or a replay.
+        int settlementDay = state.Day;
+        int stageMoney = state.Money, stageSummary = state.LastDaySummary.Count;
+        long stageLog = state.LogSequence;
+        void CompleteStage(int sequence, string title, string fallback)
+        {
+            var events = state.Log.TakeLast((int)Math.Min(state.Log.Count, state.LogSequence - stageLog)).Concat(state.LastDaySummary.Skip(stageSummary)).Distinct().ToList();
+            if (sequence == 1)
+            {
+                var manualEvents = state.LastDaySummary.Where(s => s.StartsWith("成功带回：") || s.StartsWith("出勤失败：") || s.StartsWith("归队流水：")).ToList();
+                // Direct settlement also sees the raw log: show each return record once, without replaying its payment.
+                events = manualEvents.Concat(events.Where(e => !manualEvents.Contains(e) && !manualEvents.Contains("归队流水：" + e))).Distinct().ToList();
+            }
+            if (events.Count == 0) events.Add(fallback);
+            state.SettlementTimeline.Add(new SettlementStage { Sequence = sequence, Day = settlementDay, Title = title, Events = events, MoneyBefore = stageMoney, MoneyAfter = state.Money });
+            stageMoney = state.Money; stageLog = state.LogSequence; stageSummary = state.LastDaySummary.Count;
+        }
         var manualResult = CompleteManual();
         if (!manualResult.Success) return manualResult;
+        state.SettlementTimeline.Clear();
         state.Phase = DayPhase.Settlement;
         int expenseToday = state.DailyExpense;
         // All acceptance criteria were fixed at lock; completed manual intel never upgrades another assignment.
         foreach (var task in state.LockedPlan.Where(p => !p.Completed && IsField(p.Kind))) ExecuteDelegated(task);
+        CompleteStage(1, "归队、真实消耗与运输", "本日没有待执行的出勤归队；已发生运输结果保持。");
         foreach (var rule in state.Rules.Where(r => r.EvidenceFound || r.Observed || r.Confirmed))
         {
             rule.Archived = true;
@@ -319,6 +346,7 @@ public sealed class CityEngine
         foreach (var task in state.LockedPlan.Where(p => p.Kind is JobKind.Survey or JobKind.Manual && p.Successful))
             SettleSurvey(state.Node(task.NodeId));
         foreach (var item in state.Items.Where(i => i.Location == ItemLocation.Warehouse && i.Required && i.Sealed).ToList()) Deliver(item);
+        CompleteStage(2, "证据归档与合同交付", "证据按实际已取得内容归档；本阶段没有新增现金入账。");
         foreach (var task in state.LockedPlan.Where(p => !p.Completed)) ExecuteDelegated(task);
         foreach (var item in state.Items.Where(i => i.Location == ItemLocation.Warehouse && i.Sealed && i.Disposition == "Sell").ToList())
         {
@@ -329,12 +357,15 @@ public sealed class CityEngine
                 state.LastDaySummary.Add($"出售 {item.Name}：到账 {item.Value}，唯一实例已离开库存。");
             }
         }
+        CompleteStage(3, "工程与处置完成", "本日没有工程或实物处置；新建与补充不追溯当日生效。");
         foreach (var nodeId in state.MorningOperatingNodes)
             RewardOnce($"income:{state.Day}:{nodeId}", 1, "营业", state.Node(nodeId).Name);
         bool unpaid = state.Money < expenseToday;
         if (!unpaid) { Pay(-expenseToday, "基本支出", "包含常规驻站；不重复按员工扣工资"); state.LastDaySummary.Add($"营业按晨间 {state.MorningOperatingNodes.Count} 点计入；支付基本经营支出 {expenseToday}，驻站不重复计薪。"); }
         else state.Record($"经营失败：必要支出 {expenseToday}，可用资金 {state.Money}；先判断必要支出支付，再判断交接。");
+        CompleteStage(4, "晨间资格收入与必要费用", "按晨间资格结算，已付预付不重复扣除。");
         ApplySpread();
+        CompleteStage(5, "共同快照扩张与封控", "无待执行的传播；已发生的运输影响仍保留。");
         int active = OperatingNodeIds().Count;
         state.LastDaySummary.Add($"扩张后有效营业 {active}/{state.RequiredStations}；日终余额 {state.Money}。");
         foreach (var task in state.LockedPlan) ReleaseReservations(task);
@@ -356,6 +387,7 @@ public sealed class CityEngine
         }
         else
         {
+            CompleteStage(6, "交接、失败与期限检查", "必要费用已结清，尚未交接且未到期限，继续经营。");
             var newAbilities = state.LockedPlan.Where(t => t.Successful && t.Kind is JobKind.Build or JobKind.Supply or JobKind.HeadquartersSeal)
                 .Select(t => t.Kind == JobKind.Build ? state.Node(t.NodeId).Name + "可安排驻站" : state.Item(t.TargetItemId).Name + "已完成工程并可使用").ToList();
             state.Day++;
@@ -371,6 +403,8 @@ public sealed class CityEngine
         }
         state.LastCheckpoint = state.Phase is DayPhase.Victory or DayPhase.Failed ? state.Outcome : $"第 {state.Day} 日 · 准备阶段";
         state.Record(state.Phase is DayPhase.Victory or DayPhase.Failed ? state.Outcome : "统一日结完成，情报已归档，进入下一日准备。");
+        if (state.SettlementTimeline.Count < 6) CompleteStage(6, "交接、失败与期限检查", state.Outcome);
+        CompleteStage(7, "实际进入的新阶段", state.Phase == DayPhase.Preparation ? $"已进入第 {state.Day} 个经营日。" : "本次单城经营已结束，未额外开放经营日。");
         return ActionResult.Ok(state.LastCheckpoint);
     }
 

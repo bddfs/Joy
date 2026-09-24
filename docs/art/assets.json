@@ -1,0 +1,944 @@
+{
+  "schemaVersion": 1,
+  "artVersion": "0.1.0-candidate.1",
+  "createdDate": "2026-09-24",
+  "status": "已选用于候选实现，未获团队批准；本清单不等于 P1–P5 或 AT 验收通过。",
+  "contentReferences": {
+    "artRequirements": "docs/requirements/Joy_美术与界面需求规格说明书_v0.1.md",
+    "gameRequirements": "docs/requirements/Joy_需求规格说明书_v0.3.md",
+    "gameplayBaselineCommit": "693307638a7d9521b8ee185628d8d685b66e15b2",
+    "styleReference": "output/art/joy-art-board-v0.1.png",
+    "styleReferenceUse": "已目视检查的项目参考板，仅参考调色、材质与气氛；未复制其中 UI/文字/路线布局。"
+  },
+  "generation": {
+    "tool": "built-in image_gen.imagegen",
+    "mode": "three reference-guided new-image generations",
+    "model": null,
+    "modelDisclosure": "工具未提供模型名称/版本；不推断。",
+    "seed": null,
+    "seedDisclosure": "工具未提供种子；不编造。",
+    "referenceImages": [
+      "output/art/joy-art-board-v0.1.png"
+    ],
+    "postprocessing": "仅复制原 PNG；没有外部脚本裁切、重绘或调整。Godot AtlasTexture 在运行时按区域取样。",
+    "iterations": 1
+  },
+  "rights": {
+    "creation": "本轮通过内置 imagegen 为项目生成的新图；未添加外部图库/商标素材。",
+    "reference": "参考板来自当前项目；其权利及团队使用授权仍需项目维护者确认。",
+    "license": "本清单不创设或声称第三方许可，不承诺独占版权或法律清权结论。候选实现用途已由本轮任务授权。",
+    "teamApproval": "pending"
+  },
+  "sources": [
+    {
+      "id": "city",
+      "sourceFile": "Assets/Art/city-night-v01.png",
+      "exportFile": "Assets/Art/city-night-v01.png",
+      "originalGenerationFilename": "exec-2fc9d2ce-3d21-46c6-8a98-1c1c57de747a.png",
+      "canvasPixels": [
+        1536,
+        1024
+      ],
+      "colorMode": "RGB 24-bit",
+      "alpha": false,
+      "bytes": 2468507,
+      "sha256": "e3f4700a4442975784f6cc199a6171a0c6ab571056f1f9ab462c2842e53c462f",
+      "promptFile": "docs/art/prompts/city-v01.md",
+      "effectiveArea": "full canvas",
+      "background": "opaque deep midnight; no premultiplied/transparent edge",
+      "requestedSize": [
+        1536,
+        1024
+      ],
+      "actualSizeNote": "工具返回尺寸与请求一致。"
+    },
+    {
+      "id": "room",
+      "sourceFile": "Assets/Art/room-mirror-neutral-v01.png",
+      "exportFile": "Assets/Art/room-mirror-neutral-v01.png",
+      "originalGenerationFilename": "exec-2e84e749-5dea-4c57-b7a5-ba4b4ed34ced.png",
+      "canvasPixels": [
+        1536,
+        1024
+      ],
+      "colorMode": "RGB 24-bit",
+      "alpha": false,
+      "bytes": 2298439,
+      "sha256": "c39615df03620ae44f97d14514031a77b8ba50683a298dbe8a1acbd351e62992",
+      "promptFile": "docs/art/prompts/room-v01.md",
+      "effectiveArea": "full canvas",
+      "background": "opaque deep midnight; no premultiplied/transparent edge",
+      "requestedSize": [
+        1536,
+        1024
+      ],
+      "actualSizeNote": "工具返回尺寸与请求一致。"
+    },
+    {
+      "id": "atlas",
+      "sourceFile": "Assets/Art/subjects-atlas-v01.png",
+      "exportFile": "Assets/Art/subjects-atlas-v01.png",
+      "originalGenerationFilename": "exec-317664a9-2e94-45d6-b052-4b3b69ff3b0b.png",
+      "canvasPixels": [
+        1254,
+        1254
+      ],
+      "colorMode": "RGB 24-bit",
+      "alpha": false,
+      "bytes": 2003005,
+      "sha256": "4199bcac40d9133ec7a7f284b1e692664c0c4261027b8f0038831e254fa30c8b",
+      "promptFile": "docs/art/prompts/atlas-v01.md",
+      "effectiveArea": "full canvas",
+      "background": "opaque deep midnight; no premultiplied/transparent edge",
+      "requestedSize": [
+        2048,
+        2048
+      ],
+      "actualSizeNote": "工具实际返回1254×1254，已按实际尺寸切片；未放大到请求尺寸。"
+    }
+  ],
+  "atlas": {
+    "source": "atlas",
+    "grid": [
+      4,
+      4
+    ],
+    "cellPixels": [
+      313.5,
+      313.5
+    ],
+    "unusedCells": [
+      [
+        3,
+        1
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        3,
+        3
+      ]
+    ],
+    "slicing": "Godot AtlasTexture.Region; FilterClip=true; no raster preprocessing",
+    "padding": "首轮图集主体在各 cell 内，但部分建筑接近边缘；使用 KeepAspectCentered，禁止夸大裁切。",
+    "opaqueBackground": true
+  },
+  "integration": {
+    "api": "Scripts/ArtAssets.cs",
+    "texture": "ArtAssets.Texture(string id)",
+    "image": "ArtAssets.Image(string id, float height); optional overload accepts TextureRect.StretchModeEnum",
+    "defaultImage": "ExpandMode.IgnoreSize + KeepAspectCovered + MouseFilter.Ignore",
+    "subjectImage": "Use KeepAspectCentered for building/item subjects",
+    "fallback": "Unknown/empty ID returns a neutral 2×2 gradient texture, never an invented gameplay subject.",
+    "import": "Godot standard PNG import; generated .godot cache is not source content."
+  },
+  "assets": [
+    {
+      "version": "0.1.0-candidate.1",
+      "reviewStatus": "selected-for-candidate-implementation; not-team-approved",
+      "runtimeStateVariants": "one base texture; public-state overlays are editable Godot controls; no hidden-truth branches",
+      "id": "city",
+      "deliverable": "VIS-CITY-01",
+      "phase": "P1",
+      "source": "city",
+      "exportFile": "Assets/Art/city-night-v01.png",
+      "regionPixels": [
+        0,
+        0,
+        1536,
+        1024
+      ],
+      "usage": "城市经营背景；七节点、七条双向边、名称和所有状态均由 UI 绘制。图中远景桥梁属于非交互环境装饰，不代表可行走路线。",
+      "states": [
+        "shared-neutral-background"
+      ],
+      "targetDisplay": {
+        "recommended": "wide city panel; crop uniformly as required",
+        "scale": "KeepAspectCovered",
+        "background": "opaque dark panel"
+      },
+      "anchorsNormalized": {
+        "quietOverlayArea": [
+          0.18,
+          0.3,
+          0.67,
+          0.61
+        ]
+      },
+      "requirements": [
+        "AR-01",
+        "AR-02",
+        "AR-03",
+        "AR-04",
+        "AR-05",
+        "AR-06",
+        "AR-29",
+        "AR-30",
+        "AR-31",
+        "AR-32"
+      ],
+      "acceptance": [
+        "AT-01",
+        "AT-02",
+        "AT-03",
+        "AT-14",
+        "AT-15"
+      ]
+    },
+    {
+      "version": "0.1.0-candidate.1",
+      "reviewStatus": "selected-for-candidate-implementation; not-team-approved",
+      "runtimeStateVariants": "one base texture; public-state overlays are editable Godot controls; no hidden-truth branches",
+      "id": "room",
+      "deliverable": "VIS-ROOM-01",
+      "phase": "P2",
+      "source": "room",
+      "exportFile": "Assets/Art/room-mirror-neutral-v01.png",
+      "regionPixels": [
+        0,
+        0,
+        1536,
+        1024
+      ],
+      "usage": "同一旅馆房间的中性基础画面。镜中仅普通床/窗帘倒影，无人影、符号、天体裂隙或 A/B 独有线索。",
+      "states": [
+        "A-and-B-identical-base",
+        "public-light-overlay",
+        "observed-anomaly-overlay"
+      ],
+      "targetDisplay": {
+        "recommended": "3:2 preferred when anchoring objects; retain source-relative coordinates if using aspect-cover crop",
+        "scale": "KeepAspectCovered or KeepAspectCentered",
+        "background": "opaque dark panel"
+      },
+      "anchorsNormalized": {
+        "doorCenter": [
+          0.16,
+          0.48
+        ],
+        "doorBounds": [
+          0.044,
+          0.136,
+          0.232,
+          0.693
+        ],
+        "mirrorCenter": [
+          0.82,
+          0.45
+        ],
+        "mirrorGlassBounds": [
+          0.726,
+          0.185,
+          0.18,
+          0.527
+        ],
+        "deskTopCenter": [
+          0.49,
+          0.59
+        ],
+        "deskTopBounds": [
+          0.306,
+          0.57,
+          0.363,
+          0.039
+        ]
+      },
+      "anchorNotes": "目视估计的源图归一化坐标；父容器若裁切，须使用同一缩放/偏移变换，不能直接套用容器比例。门、镜和桌的位置不随隐藏变体改变。",
+      "requirements": [
+        "AR-01",
+        "AR-02",
+        "AR-11",
+        "AR-12",
+        "AR-13",
+        "AR-14",
+        "AR-29",
+        "AR-30",
+        "AR-31",
+        "AR-32"
+      ],
+      "acceptance": [
+        "AT-01",
+        "AT-05",
+        "AT-06",
+        "AT-14",
+        "AT-15"
+      ]
+    },
+    {
+      "version": "0.1.0-candidate.1",
+      "reviewStatus": "selected-for-candidate-implementation; not-team-approved",
+      "runtimeStateVariants": "one base texture; public-state overlays are editable Godot controls; no hidden-truth branches",
+      "id": "node-hq",
+      "name": "总部",
+      "deliverable": "VIS-NODE-01",
+      "phase": "P1",
+      "source": "atlas",
+      "exportFile": "Assets/Art/subjects-atlas-v01.png",
+      "regionPixels": [
+        0,
+        0,
+        313.5,
+        313.5
+      ],
+      "atlasCell": [
+        0,
+        0
+      ],
+      "usage": "地点建筑缩略图；归属、建设、营业、选中、队伍和已知威胁由独立 UI 叠加。",
+      "states": [
+        "all-public-node-states-same-subject"
+      ],
+      "targetDisplay": {
+        "recommended": "72–144 px square thumbnail (proposed, client QA pending)",
+        "scale": "KeepAspectCentered",
+        "background": "opaque midnight panel; atlas has no alpha"
+      },
+      "anchorsNormalized": {
+        "cellCenter": [
+          0.5,
+          0.5
+        ]
+      },
+      "requirements": [
+        "AR-05",
+        "AR-07",
+        "AR-29",
+        "AR-30",
+        "AR-31",
+        "AR-32"
+      ],
+      "acceptance": [
+        "AT-03",
+        "AT-14",
+        "AT-15"
+      ]
+    },
+    {
+      "version": "0.1.0-candidate.1",
+      "reviewStatus": "selected-for-candidate-implementation; not-team-approved",
+      "runtimeStateVariants": "one base texture; public-state overlays are editable Godot controls; no hidden-truth branches",
+      "id": "node-hotel",
+      "name": "旧旅馆",
+      "deliverable": "VIS-NODE-01",
+      "phase": "P1",
+      "source": "atlas",
+      "exportFile": "Assets/Art/subjects-atlas-v01.png",
+      "regionPixels": [
+        313.5,
+        0,
+        313.5,
+        313.5
+      ],
+      "atlasCell": [
+        1,
+        0
+      ],
+      "usage": "地点建筑缩略图；归属、建设、营业、选中、队伍和已知威胁由独立 UI 叠加。",
+      "states": [
+        "all-public-node-states-same-subject"
+      ],
+      "targetDisplay": {
+        "recommended": "72–144 px square thumbnail (proposed, client QA pending)",
+        "scale": "KeepAspectCentered",
+        "background": "opaque midnight panel; atlas has no alpha"
+      },
+      "anchorsNormalized": {
+        "cellCenter": [
+          0.5,
+          0.5
+        ]
+      },
+      "requirements": [
+        "AR-05",
+        "AR-07",
+        "AR-29",
+        "AR-30",
+        "AR-31",
+        "AR-32"
+      ],
+      "acceptance": [
+        "AT-03",
+        "AT-14",
+        "AT-15"
+      ]
+    },
+    {
+      "version": "0.1.0-candidate.1",
+      "reviewStatus": "selected-for-candidate-implementation; not-team-approved",
+      "runtimeStateVariants": "one base texture; public-state overlays are editable Godot controls; no hidden-truth branches",
+      "id": "node-north",
+      "name": "北路口",
+      "deliverable": "VIS-NODE-01",
+      "phase": "P1",
+      "source": "atlas",
+      "exportFile": "Assets/Art/subjects-atlas-v01.png",
+      "regionPixels": [
+        627,
+        0,
+        313.5,
+        313.5
+      ],
+      "atlasCell": [
+        2,
+        0
+      ],
+      "usage": "地点建筑缩略图；归属、建设、营业、选中、队伍和已知威胁由独立 UI 叠加。",
+      "states": [
+        "all-public-node-states-same-subject"
+      ],
+      "targetDisplay": {
+        "recommended": "72–144 px square thumbnail (proposed, client QA pending)",
+        "scale": "KeepAspectCentered",
+        "background": "opaque midnight panel; atlas has no alpha"
+      },
+      "anchorsNormalized": {
+        "cellCenter": [
+          0.5,
+          0.5
+        ]
+      },
+      "requirements": [
+        "AR-05",
+        "AR-07",
+        "AR-29",
+        "AR-30",
+        "AR-31",
+        "AR-32"
+      ],
+      "acceptance": [
+        "AT-03",
+        "AT-14",
+        "AT-15"
+      ]
+    },
+    {
+      "version": "0.1.0-candidate.1",
+      "reviewStatus": "selected-for-candidate-implementation; not-team-approved",
+      "runtimeStateVariants": "one base texture; public-state overlays are editable Godot controls; no hidden-truth branches",
+      "id": "node-hospital",
+      "name": "医院",
+      "deliverable": "VIS-NODE-01",
+      "phase": "P1",
+      "source": "atlas",
+      "exportFile": "Assets/Art/subjects-atlas-v01.png",
+      "regionPixels": [
+        940.5,
+        0,
+        313.5,
+        313.5
+      ],
+      "atlasCell": [
+        3,
+        0
+      ],
+      "usage": "地点建筑缩略图；归属、建设、营业、选中、队伍和已知威胁由独立 UI 叠加。",
+      "states": [
+        "all-public-node-states-same-subject"
+      ],
+      "targetDisplay": {
+        "recommended": "72–144 px square thumbnail (proposed, client QA pending)",
+        "scale": "KeepAspectCentered",
+        "background": "opaque midnight panel; atlas has no alpha"
+      },
+      "anchorsNormalized": {
+        "cellCenter": [
+          0.5,
+          0.5
+        ]
+      },
+      "requirements": [
+        "AR-05",
+        "AR-07",
+        "AR-29",
+        "AR-30",
+        "AR-31",
+        "AR-32"
+      ],
+      "acceptance": [
+        "AT-03",
+        "AT-14",
+        "AT-15"
+      ]
+    },
+    {
+      "version": "0.1.0-candidate.1",
+      "reviewStatus": "selected-for-candidate-implementation; not-team-approved",
+      "runtimeStateVariants": "one base texture; public-state overlays are editable Godot controls; no hidden-truth branches",
+      "id": "node-source",
+      "name": "源头设施",
+      "deliverable": "VIS-NODE-01",
+      "phase": "P1",
+      "source": "atlas",
+      "exportFile": "Assets/Art/subjects-atlas-v01.png",
+      "regionPixels": [
+        0,
+        313.5,
+        313.5,
+        313.5
+      ],
+      "atlasCell": [
+        0,
+        1
+      ],
+      "usage": "地点建筑缩略图；归属、建设、营业、选中、队伍和已知威胁由独立 UI 叠加。",
+      "states": [
+        "all-public-node-states-same-subject"
+      ],
+      "targetDisplay": {
+        "recommended": "72–144 px square thumbnail (proposed, client QA pending)",
+        "scale": "KeepAspectCentered",
+        "background": "opaque midnight panel; atlas has no alpha"
+      },
+      "anchorsNormalized": {
+        "cellCenter": [
+          0.5,
+          0.5
+        ]
+      },
+      "requirements": [
+        "AR-05",
+        "AR-07",
+        "AR-29",
+        "AR-30",
+        "AR-31",
+        "AR-32"
+      ],
+      "acceptance": [
+        "AT-03",
+        "AT-14",
+        "AT-15"
+      ]
+    },
+    {
+      "version": "0.1.0-candidate.1",
+      "reviewStatus": "selected-for-candidate-implementation; not-team-approved",
+      "runtimeStateVariants": "one base texture; public-state overlays are editable Godot controls; no hidden-truth branches",
+      "id": "node-south",
+      "name": "南路口",
+      "deliverable": "VIS-NODE-01",
+      "phase": "P1",
+      "source": "atlas",
+      "exportFile": "Assets/Art/subjects-atlas-v01.png",
+      "regionPixels": [
+        313.5,
+        313.5,
+        313.5,
+        313.5
+      ],
+      "atlasCell": [
+        1,
+        1
+      ],
+      "usage": "地点建筑缩略图；归属、建设、营业、选中、队伍和已知威胁由独立 UI 叠加。",
+      "states": [
+        "all-public-node-states-same-subject"
+      ],
+      "targetDisplay": {
+        "recommended": "72–144 px square thumbnail (proposed, client QA pending)",
+        "scale": "KeepAspectCentered",
+        "background": "opaque midnight panel; atlas has no alpha"
+      },
+      "anchorsNormalized": {
+        "cellCenter": [
+          0.5,
+          0.5
+        ]
+      },
+      "requirements": [
+        "AR-05",
+        "AR-07",
+        "AR-29",
+        "AR-30",
+        "AR-31",
+        "AR-32"
+      ],
+      "acceptance": [
+        "AT-03",
+        "AT-14",
+        "AT-15"
+      ]
+    },
+    {
+      "version": "0.1.0-candidate.1",
+      "reviewStatus": "selected-for-candidate-implementation; not-team-approved",
+      "runtimeStateVariants": "one base texture; public-state overlays are editable Godot controls; no hidden-truth branches",
+      "id": "node-coop",
+      "name": "合作点",
+      "deliverable": "VIS-NODE-01",
+      "phase": "P1",
+      "source": "atlas",
+      "exportFile": "Assets/Art/subjects-atlas-v01.png",
+      "regionPixels": [
+        627,
+        313.5,
+        313.5,
+        313.5
+      ],
+      "atlasCell": [
+        2,
+        1
+      ],
+      "usage": "地点建筑缩略图；归属、建设、营业、选中、队伍和已知威胁由独立 UI 叠加。",
+      "states": [
+        "all-public-node-states-same-subject"
+      ],
+      "targetDisplay": {
+        "recommended": "72–144 px square thumbnail (proposed, client QA pending)",
+        "scale": "KeepAspectCentered",
+        "background": "opaque midnight panel; atlas has no alpha"
+      },
+      "anchorsNormalized": {
+        "cellCenter": [
+          0.5,
+          0.5
+        ]
+      },
+      "requirements": [
+        "AR-05",
+        "AR-07",
+        "AR-29",
+        "AR-30",
+        "AR-31",
+        "AR-32"
+      ],
+      "acceptance": [
+        "AT-03",
+        "AT-14",
+        "AT-15"
+      ]
+    },
+    {
+      "version": "0.1.0-candidate.1",
+      "reviewStatus": "selected-for-candidate-implementation; not-team-approved",
+      "runtimeStateVariants": "one base texture; public-state overlays are editable Godot controls; no hidden-truth branches",
+      "id": "card-investigate",
+      "name": "调查插画",
+      "deliverable": "VIS-CARD-01",
+      "phase": "P3",
+      "source": "atlas",
+      "exportFile": "Assets/Art/subjects-atlas-v01.png",
+      "regionPixels": [
+        0,
+        627,
+        313.5,
+        313.5
+      ],
+      "atlasCell": [
+        0,
+        2
+      ],
+      "usage": "卡牌插画区；名称、费用、效果、目标、模仿参考和可用性由独立 UI 显示。",
+      "states": [
+        "all-public-card-states-same-illustration"
+      ],
+      "targetDisplay": {
+        "recommended": "112–176 px illustration block (proposed, client QA pending)",
+        "scale": "KeepAspectCovered",
+        "background": "opaque midnight panel; atlas has no alpha"
+      },
+      "anchorsNormalized": {
+        "cellCenter": [
+          0.5,
+          0.5
+        ]
+      },
+      "requirements": [
+        "AR-12",
+        "AR-15",
+        "AR-16",
+        "AR-29",
+        "AR-30",
+        "AR-31",
+        "AR-32"
+      ],
+      "acceptance": [
+        "AT-05",
+        "AT-07",
+        "AT-14",
+        "AT-15"
+      ]
+    },
+    {
+      "version": "0.1.0-candidate.1",
+      "reviewStatus": "selected-for-candidate-implementation; not-team-approved",
+      "runtimeStateVariants": "one base texture; public-state overlays are editable Godot controls; no hidden-truth branches",
+      "id": "card-light",
+      "name": "点灯插画",
+      "deliverable": "VIS-CARD-02",
+      "phase": "P3",
+      "source": "atlas",
+      "exportFile": "Assets/Art/subjects-atlas-v01.png",
+      "regionPixels": [
+        313.5,
+        627,
+        313.5,
+        313.5
+      ],
+      "atlasCell": [
+        1,
+        2
+      ],
+      "usage": "卡牌插画区；名称、费用、效果、目标、模仿参考和可用性由独立 UI 显示。",
+      "states": [
+        "all-public-card-states-same-illustration"
+      ],
+      "targetDisplay": {
+        "recommended": "112–176 px illustration block (proposed, client QA pending)",
+        "scale": "KeepAspectCovered",
+        "background": "opaque midnight panel; atlas has no alpha"
+      },
+      "anchorsNormalized": {
+        "cellCenter": [
+          0.5,
+          0.5
+        ]
+      },
+      "requirements": [
+        "AR-12",
+        "AR-15",
+        "AR-16",
+        "AR-29",
+        "AR-30",
+        "AR-31",
+        "AR-32"
+      ],
+      "acceptance": [
+        "AT-05",
+        "AT-07",
+        "AT-14",
+        "AT-15"
+      ]
+    },
+    {
+      "version": "0.1.0-candidate.1",
+      "reviewStatus": "selected-for-candidate-implementation; not-team-approved",
+      "runtimeStateVariants": "one base texture; public-state overlays are editable Godot controls; no hidden-truth branches",
+      "id": "card-mimic",
+      "name": "模仿插画",
+      "deliverable": "VIS-CARD-03",
+      "phase": "P3",
+      "source": "atlas",
+      "exportFile": "Assets/Art/subjects-atlas-v01.png",
+      "regionPixels": [
+        627,
+        627,
+        313.5,
+        313.5
+      ],
+      "atlasCell": [
+        2,
+        2
+      ],
+      "usage": "卡牌插画区；名称、费用、效果、目标、模仿参考和可用性由独立 UI 显示。",
+      "states": [
+        "all-public-card-states-same-illustration"
+      ],
+      "targetDisplay": {
+        "recommended": "112–176 px illustration block (proposed, client QA pending)",
+        "scale": "KeepAspectCovered",
+        "background": "opaque midnight panel; atlas has no alpha"
+      },
+      "anchorsNormalized": {
+        "cellCenter": [
+          0.5,
+          0.5
+        ]
+      },
+      "requirements": [
+        "AR-12",
+        "AR-15",
+        "AR-16",
+        "AR-29",
+        "AR-30",
+        "AR-31",
+        "AR-32"
+      ],
+      "acceptance": [
+        "AT-05",
+        "AT-07",
+        "AT-08",
+        "AT-14",
+        "AT-15"
+      ]
+    },
+    {
+      "version": "0.1.0-candidate.1",
+      "reviewStatus": "selected-for-candidate-implementation; not-team-approved",
+      "runtimeStateVariants": "one base texture; public-state overlays are editable Godot controls; no hidden-truth branches",
+      "id": "item-clock",
+      "name": "座钟主体",
+      "deliverable": "VIS-ITEM-01",
+      "phase": "P4",
+      "source": "atlas",
+      "exportFile": "Assets/Art/subjects-atlas-v01.png",
+      "regionPixels": [
+        0,
+        940.5,
+        313.5,
+        313.5
+      ],
+      "atlasCell": [
+        0,
+        3
+      ],
+      "usage": "同一实物主体；地点、归属、封装、储存、余量与合法状态由独立 UI 显示。",
+      "states": [
+        "discovered",
+        "carried",
+        "sealed",
+        "warehouse",
+        "delivered"
+      ],
+      "targetDisplay": {
+        "recommended": "56–112 px square thumbnail (proposed, client QA pending)",
+        "scale": "KeepAspectCentered",
+        "background": "opaque midnight panel; atlas has no alpha"
+      },
+      "anchorsNormalized": {
+        "cellCenter": [
+          0.5,
+          0.5
+        ]
+      },
+      "requirements": [
+        "AR-19",
+        "AR-29",
+        "AR-30",
+        "AR-31",
+        "AR-32"
+      ],
+      "acceptance": [
+        "AT-09",
+        "AT-14",
+        "AT-15"
+      ]
+    },
+    {
+      "version": "0.1.0-candidate.1",
+      "reviewStatus": "selected-for-candidate-implementation; not-team-approved",
+      "runtimeStateVariants": "one base texture; public-state overlays are editable Godot controls; no hidden-truth branches",
+      "id": "item-lamp",
+      "name": "灯主体",
+      "deliverable": "VIS-ITEM-02",
+      "phase": "P4",
+      "source": "atlas",
+      "exportFile": "Assets/Art/subjects-atlas-v01.png",
+      "regionPixels": [
+        313.5,
+        940.5,
+        313.5,
+        313.5
+      ],
+      "atlasCell": [
+        1,
+        3
+      ],
+      "usage": "同一实物主体；地点、归属、封装、储存、余量与合法状态由独立 UI 显示。",
+      "states": [
+        "unsealed-storage",
+        "sealed-warehouse",
+        "installed",
+        "support-unused",
+        "support-used"
+      ],
+      "targetDisplay": {
+        "recommended": "56–112 px square thumbnail (proposed, client QA pending)",
+        "scale": "KeepAspectCentered",
+        "background": "opaque midnight panel; atlas has no alpha"
+      },
+      "anchorsNormalized": {
+        "cellCenter": [
+          0.5,
+          0.5
+        ]
+      },
+      "requirements": [
+        "AR-19",
+        "AR-29",
+        "AR-30",
+        "AR-31",
+        "AR-32"
+      ],
+      "acceptance": [
+        "AT-09",
+        "AT-14",
+        "AT-15"
+      ]
+    },
+    {
+      "version": "0.1.0-candidate.1",
+      "reviewStatus": "selected-for-candidate-implementation; not-team-approved",
+      "runtimeStateVariants": "one base texture; public-state overlays are editable Godot controls; no hidden-truth branches",
+      "id": "item-kit",
+      "name": "封装工具主体",
+      "deliverable": "VIS-TOOL-01",
+      "phase": "P4",
+      "source": "atlas",
+      "exportFile": "Assets/Art/subjects-atlas-v01.png",
+      "regionPixels": [
+        627,
+        940.5,
+        313.5,
+        313.5
+      ],
+      "atlasCell": [
+        2,
+        3
+      ],
+      "usage": "同一实物主体；地点、归属、封装、储存、余量与合法状态由独立 UI 显示。",
+      "states": [
+        "remaining",
+        "reserved",
+        "consumed",
+        "refill-next-day"
+      ],
+      "targetDisplay": {
+        "recommended": "56–112 px square thumbnail (proposed, client QA pending)",
+        "scale": "KeepAspectCentered",
+        "background": "opaque midnight panel; atlas has no alpha"
+      },
+      "anchorsNormalized": {
+        "cellCenter": [
+          0.5,
+          0.5
+        ]
+      },
+      "requirements": [
+        "AR-20",
+        "AR-29",
+        "AR-30",
+        "AR-31",
+        "AR-32"
+      ],
+      "acceptance": [
+        "AT-09",
+        "AT-14",
+        "AT-15"
+      ]
+    }
+  ],
+  "verification": {
+    "completed": [
+      "目视检查三张原图：无生成乱码、名称/数字/按钮/路线/状态 UI。",
+      "核对 PNG 实际尺寸、RGB 格式、文件大小和 SHA-256。",
+      "13 个 AtlasTexture cell 与 4×4原图布局一致，3个留空cell未注册为资产。",
+      "同一主体跨状态用同一ID/切片；room取图不接受谜题变体参数。"
+    ],
+    "notClaimed": [
+      "未完成团队对 DA-01 气氛/恐怖强度批准。",
+      "未完成完整 P1–P5 / AT-01至AT-15 验收。",
+      "未完成 macOS 导入、性能或最低规格确认。",
+      "UI 长文本、锚点裁切变换、隐藏信息配对、完整玩法流程由主任务另行验证。"
+    ],
+    "knownLimitations": [
+      "主体图集为 RGB 深色底；不是透明物品叠层，不适合直接放在浅色背景。",
+      "room 仅中性基础；异常与实际照明反馈需可编辑同锚点叠层，本批未生成单独透明异常 PNG。",
+      "调查/点灯/模仿首轮插画采用同色系；更广卡牌库仍复用或由后续资源补充。",
+      "灯卡与实物灯采用同种黄铜立柱/米色灯罩设计；跨实物状态必须统一使用 item-lamp 本体，不能切换到 card-light 当作另一个状态。",
+      "城市远景含普通桥梁/建筑照明；游戏路线、营业和安全状态只认独立 UI 标记。"
+    ]
+  }
+}
+

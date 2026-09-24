@@ -19,6 +19,7 @@ public sealed class GameState
     public string Scenario { get; set; } = "M2";
     public bool PressureEnabled { get; set; }
     public List<string> LastDaySummary { get; set; } = new();
+    public List<SettlementStage> SettlementTimeline { get; set; } = new();
     public int Seed { get; set; } = 413;
     public ulong RandomState { get; set; } = 413;
     public string CityName { get; set; } = "雾港";
@@ -43,6 +44,7 @@ public sealed class GameState
     public List<string> PaidRewards { get; set; } = new();
     public List<LedgerEntry> Ledger { get; set; } = new();
     public List<string> Log { get; set; } = new();
+    public long LogSequence { get; set; }
     public bool SourceRecovered { get; set; }
     public bool EmergencySupportUsed { get; set; }
     public bool Expanded { get; set; }
@@ -57,7 +59,7 @@ public sealed class GameState
     public CityNode Node(string id) => Nodes.First(n => n.Id == id);
     public ItemState Item(string id) => Items.First(i => i.Id == id);
     public RuleState Rule(string id) => Rules.First(r => r.Id == id);
-    public void Record(string text) { Log.Add($"第 {Day} 日 · {text}"); if (Log.Count > 250) Log.RemoveAt(0); }
+    public void Record(string text) { LogSequence++; Log.Add($"第 {Day} 日 · {text}"); if (Log.Count > 250) Log.RemoveAt(0); }
     public int Next(int max)
     {
         if (max <= 0) throw new ArgumentOutOfRangeException(nameof(max));
@@ -147,6 +149,16 @@ public sealed class LedgerEntry
     public string Description { get; set; } = "";
     public int Amount { get; set; }
     public int Balance { get; set; }
+}
+
+public sealed class SettlementStage
+{
+    public int Sequence { get; set; }
+    public int Day { get; set; }
+    public string Title { get; set; } = "";
+    public List<string> Events { get; set; } = new();
+    public int MoneyBefore { get; set; }
+    public int MoneyAfter { get; set; }
 }
 
 public sealed class RuleState

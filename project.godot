@@ -3,15 +3,15 @@ config_version=5
 
 [application]
 config/name="Joy · 异常回收公司"
-config/version="0.3.0-m2.1"
+config/version="0.3.0-art.1"
 run/main_scene="res://Scenes/Main.tscn"
 config/features=PackedStringArray("4.7", "C#", "GL Compatibility")
 
 [display]
-window/size/viewport_width=1600
-window/size/viewport_height=1000
+window/size/viewport_width=1920
+window/size/viewport_height=1080
 window/size/window_width_override=1440
-window/size/window_height_override=900
+window/size/window_height_override=810
 window/stretch/mode="canvas_items"
 
 [dotnet]

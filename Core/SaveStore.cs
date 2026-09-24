@@ -206,6 +206,14 @@ public sealed class SaveStore
         ListExists(state.LockedPlan, "锁定方案"); ListExists(state.Forecast, "扩张预告");
         ListExists(state.Ledger, "账目"); ListExists(state.Log, "日志"); ListExists(state.SeenHints, "提示记录");
         ListExists(state.LastDaySummary, "日结摘要");
+        ListExists(state.SettlementTimeline, "日结阶段记录");
+        Require(state.LogSequence >= 0 && state.SettlementTimeline.Count <= 7, "日结记录参数无效。");
+        for (int index = 0; index < state.SettlementTimeline.Count; index++)
+        {
+            var stage = state.SettlementTimeline[index];
+            Require(stage is not null && stage.Sequence == index + 1 && stage.Day >= 1 && stage.Day <= state.Day && !string.IsNullOrWhiteSpace(stage.Title), "日结阶段顺序或归属无效。");
+            ListExists(stage.Events, "日结事件");
+        }
         ListExists(state.PaidRewards, "奖励台账"); ListExists(state.MorningOperatingNodes, "晨间营业记录");
         Require(state.Stations is not null, "驻站记录为空。");
         var employees = Ids(state.Employees, e => e.Id, "员工");

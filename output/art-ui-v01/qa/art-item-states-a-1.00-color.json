@@ -1,0 +1,346 @@
+{
+  "canvas": {
+    "width": 1920,
+    "height": 1080
+  },
+  "scale": 1,
+  "staticMode": true,
+  "grayscale": false,
+  "layoutMinimum": {
+    "width": 627,
+    "height": 186
+  },
+  "labels": [
+    {
+      "text": "\u516C\u53F8\u5B9E\u7269\u6863\u6848  /  \u4E3B\u4F53\u4E0E\u72B6\u6001",
+      "fontSize": 32,
+      "characters": 16
+    },
+    {
+      "text": "\u72B6\u6001\u5BF9\u7167\u6837\u7A3F \u00B7 \u6BCF\u5217\u5C55\u793A\u540C\u4E00\u4EF6\u7269\u54C1\u7684\u5408\u6CD5\u72B6\u6001\uFF0C\u4E0D\u8868\u793A\u540C\u65F6\u62E5\u6709\u591A\u4EF6\u3002",
+      "fontSize": 18,
+      "characters": 34
+    },
+    {
+      "text": "VIS-ITEM-01 / \u5EA7\u949F",
+      "fontSize": 15,
+      "characters": 16
+    },
+    {
+      "text": "\u672A\u5C01\u88C5",
+      "fontSize": 14,
+      "characters": 3
+    },
+    {
+      "text": "\u955C\u4E2D\u4F4F\u5BA2\u7684\u5EA7\u949F",
+      "fontSize": 20,
+      "characters": 7
+    },
+    {
+      "text": "\u5DF2\u53D1\u73B0 \u00B7 \u7559\u5728\u73B0\u573A",
+      "fontSize": 17,
+      "characters": 10
+    },
+    {
+      "text": "\u672A\u88AB\u4E8B\u52A1\u9884\u7559\n\u6309\u5F53\u524D\u9636\u6BB5\u4E0E\u89C4\u7A0B\u64CD\u4F5C",
+      "fontSize": 15,
+      "characters": 17
+    },
+    {
+      "text": "\u672A\u5C01\u88C5",
+      "fontSize": 14,
+      "characters": 3
+    },
+    {
+      "text": "\u955C\u4E2D\u4F4F\u5BA2\u7684\u5EA7\u949F",
+      "fontSize": 20,
+      "characters": 7
+    },
+    {
+      "text": "\u968F\u961F\u643A\u5E26 \u00B7 \u5C1A\u672A\u5F52\u5E93",
+      "fontSize": 17,
+      "characters": 11
+    },
+    {
+      "text": "\u672A\u88AB\u4E8B\u52A1\u9884\u7559\n\u6309\u5F53\u524D\u9636\u6BB5\u4E0E\u89C4\u7A0B\u64CD\u4F5C",
+      "fontSize": 15,
+      "characters": 17
+    },
+    {
+      "text": "\u5DF2\u5C01\u88C5",
+      "fontSize": 14,
+      "characters": 3
+    },
+    {
+      "text": "\u955C\u4E2D\u4F4F\u5BA2\u7684\u5EA7\u949F",
+      "fontSize": 20,
+      "characters": 7
+    },
+    {
+      "text": "\u516C\u53F8\u4ED3\u5E93 \u00B7 \u552F\u4E00\u5B9E\u7269",
+      "fontSize": 17,
+      "characters": 11
+    },
+    {
+      "text": "\u672A\u88AB\u4E8B\u52A1\u9884\u7559\n\u6309\u5F53\u524D\u9636\u6BB5\u4E0E\u89C4\u7A0B\u64CD\u4F5C",
+      "fontSize": 15,
+      "characters": 17
+    },
+    {
+      "text": "\u5DF2\u5C01\u88C5",
+      "fontSize": 14,
+      "characters": 3
+    },
+    {
+      "text": "\u955C\u4E2D\u4F4F\u5BA2\u7684\u5EA7\u949F",
+      "fontSize": 20,
+      "characters": 7
+    },
+    {
+      "text": "\u5408\u540C\u5DF2\u4EA4\u4ED8 \u00B7 \u5DF2\u79BB\u5F00\u5E93\u5B58",
+      "fontSize": 17,
+      "characters": 13
+    },
+    {
+      "text": "\u672A\u88AB\u4E8B\u52A1\u9884\u7559\n\u6309\u5F53\u524D\u9636\u6BB5\u4E0E\u89C4\u7A0B\u64CD\u4F5C",
+      "fontSize": 15,
+      "characters": 17
+    },
+    {
+      "text": "VIS-ITEM-02 / \u4FA7\u623F\u706F",
+      "fontSize": 15,
+      "characters": 17
+    },
+    {
+      "text": "\u672A\u5C01\u88C5",
+      "fontSize": 14,
+      "characters": 3
+    },
+    {
+      "text": "\u4FA7\u623F\u706F",
+      "fontSize": 20,
+      "characters": 3
+    },
+    {
+      "text": "\u516C\u53F8\u4ED3\u5E93 \u00B7 \u552F\u4E00\u5B9E\u7269",
+      "fontSize": 17,
+      "characters": 11
+    },
+    {
+      "text": "\u672A\u5C01\u88C5\u6682\u5B58 \u00B7 \u4E0D\u80FD\u51FA\u552E\u6216\u652F\u63F4",
+      "fontSize": 17,
+      "characters": 15
+    },
+    {
+      "text": "\u672A\u88AB\u4E8B\u52A1\u9884\u7559\n\u6309\u5F53\u524D\u9636\u6BB5\u4E0E\u89C4\u7A0B\u64CD\u4F5C",
+      "fontSize": 15,
+      "characters": 17
+    },
+    {
+      "text": "\u5DF2\u5C01\u88C5",
+      "fontSize": 14,
+      "characters": 3
+    },
+    {
+      "text": "\u4FA7\u623F\u706F",
+      "fontSize": 20,
+      "characters": 3
+    },
+    {
+      "text": "\u516C\u53F8\u4ED3\u5E93 \u00B7 \u552F\u4E00\u5B9E\u7269",
+      "fontSize": 17,
+      "characters": 11
+    },
+    {
+      "text": "\u516C\u5F00\u62A5\u4EF7 6 \u00B7 \u51FA\u552E\u5230\u8D26\u524D\u4E0D\u8BA1\u73B0\u91D1",
+      "fontSize": 17,
+      "characters": 18
+    },
+    {
+      "text": "\u672A\u88AB\u4E8B\u52A1\u9884\u7559\n\u6309\u5F53\u524D\u9636\u6BB5\u4E0E\u89C4\u7A0B\u64CD\u4F5C",
+      "fontSize": 15,
+      "characters": 17
+    },
+    {
+      "text": "\u5DF2\u5C01\u88C5",
+      "fontSize": 14,
+      "characters": 3
+    },
+    {
+      "text": "\u4FA7\u623F\u706F",
+      "fontSize": 20,
+      "characters": 3
+    },
+    {
+      "text": "\u5DF2\u5B89\u88C5 \u00B7 \u516C\u5171\u534F\u4F5C\u70B9",
+      "fontSize": 17,
+      "characters": 11
+    },
+    {
+      "text": "\u4ECA\u65E5\u652F\u63F4\u672A\u7528 \u00B7 \u9700\u5728\u9501\u5B9A\u524D\u9884\u7559",
+      "fontSize": 17,
+      "characters": 16
+    },
+    {
+      "text": "\u672A\u88AB\u4E8B\u52A1\u9884\u7559\n\u6309\u5F53\u524D\u9636\u6BB5\u4E0E\u89C4\u7A0B\u64CD\u4F5C",
+      "fontSize": 15,
+      "characters": 17
+    },
+    {
+      "text": "\u5DF2\u5C01\u88C5",
+      "fontSize": 14,
+      "characters": 3
+    },
+    {
+      "text": "\u4FA7\u623F\u706F",
+      "fontSize": 20,
+      "characters": 3
+    },
+    {
+      "text": "\u5DF2\u5B89\u88C5 \u00B7 \u516C\u5171\u534F\u4F5C\u70B9",
+      "fontSize": 17,
+      "characters": 11
+    },
+    {
+      "text": "\u4ECA\u65E5\u652F\u63F4\u5DF2\u7528 \u00B7 \u62C6\u88C5\u4E0E\u8BFB\u6863\u4E0D\u5237\u65B0",
+      "fontSize": 17,
+      "characters": 17
+    },
+    {
+      "text": "\u672A\u88AB\u4E8B\u52A1\u9884\u7559\n\u6309\u5F53\u524D\u9636\u6BB5\u4E0E\u89C4\u7A0B\u64CD\u4F5C",
+      "fontSize": 15,
+      "characters": 17
+    },
+    {
+      "text": "\u5DF2\u5C01\u88C5",
+      "fontSize": 14,
+      "characters": 3
+    },
+    {
+      "text": "\u4FA7\u623F\u706F",
+      "fontSize": 20,
+      "characters": 3
+    },
+    {
+      "text": "\u5DF2\u5B89\u88C5 \u00B7 \u516C\u5171\u534F\u4F5C\u70B9",
+      "fontSize": 17,
+      "characters": 11
+    },
+    {
+      "text": "\u4ECA\u65E5\u652F\u63F4\u672A\u7528 \u00B7 \u505C\u4E1A\u6682\u505C\u80FD\u529B",
+      "fontSize": 17,
+      "characters": 15
+    },
+    {
+      "text": "\u672A\u88AB\u4E8B\u52A1\u9884\u7559\n\u6309\u5F53\u524D\u9636\u6BB5\u4E0E\u89C4\u7A0B\u64CD\u4F5C",
+      "fontSize": 15,
+      "characters": 17
+    },
+    {
+      "text": "VIS-TOOL-01 / \u552F\u4E00\u9694\u79BB\u5DE5\u5177",
+      "fontSize": 15,
+      "characters": 20
+    },
+    {
+      "text": "\u65E0\u9700\u5C01\u88C5",
+      "fontSize": 14,
+      "characters": 4
+    },
+    {
+      "text": "\u4FBF\u643A\u9694\u79BB\u5DE5\u5177",
+      "fontSize": 20,
+      "characters": 6
+    },
+    {
+      "text": "\u516C\u53F8\u4ED3\u5E93 \u00B7 \u552F\u4E00\u5B9E\u7269",
+      "fontSize": 17,
+      "characters": 11
+    },
+    {
+      "text": "\u5269\u4F59 2 / \u5BB9\u91CF 2 \u00B7 \u9884\u7559\u4E0D\u7B49\u4E8E\u6D88\u8017",
+      "fontSize": 17,
+      "characters": 21
+    },
+    {
+      "text": "\u672A\u88AB\u4E8B\u52A1\u9884\u7559\n\u6309\u5F53\u524D\u9636\u6BB5\u4E0E\u89C4\u7A0B\u64CD\u4F5C",
+      "fontSize": 15,
+      "characters": 17
+    },
+    {
+      "text": "\u65E0\u9700\u5C01\u88C5",
+      "fontSize": 14,
+      "characters": 4
+    },
+    {
+      "text": "\u4FBF\u643A\u9694\u79BB\u5DE5\u5177",
+      "fontSize": 20,
+      "characters": 6
+    },
+    {
+      "text": "\u516C\u53F8\u4ED3\u5E93 \u00B7 \u552F\u4E00\u5B9E\u7269",
+      "fontSize": 17,
+      "characters": 11
+    },
+    {
+      "text": "\u5269\u4F59 2 / \u5BB9\u91CF 2 \u00B7 \u9884\u7559\u4E0D\u7B49\u4E8E\u6D88\u8017",
+      "fontSize": 17,
+      "characters": 21
+    },
+    {
+      "text": "\u6574\u4EF6\u9884\u7559 \u00B7 \u66AE\u706F\u65C5\u9986 / 2 \u4EBA\u4E8B\u52A1\n\u6309\u5F53\u524D\u9636\u6BB5\u4E0E\u89C4\u7A0B\u64CD\u4F5C",
+      "fontSize": 15,
+      "characters": 30
+    },
+    {
+      "text": "\u65E0\u9700\u5C01\u88C5",
+      "fontSize": 14,
+      "characters": 4
+    },
+    {
+      "text": "\u4FBF\u643A\u9694\u79BB\u5DE5\u5177",
+      "fontSize": 20,
+      "characters": 6
+    },
+    {
+      "text": "\u516C\u53F8\u4ED3\u5E93 \u00B7 \u552F\u4E00\u5B9E\u7269",
+      "fontSize": 17,
+      "characters": 11
+    },
+    {
+      "text": "\u5269\u4F59 0 / \u5BB9\u91CF 2 \u00B7 \u9884\u7559\u4E0D\u7B49\u4E8E\u6D88\u8017",
+      "fontSize": 17,
+      "characters": 21
+    },
+    {
+      "text": "\u672A\u88AB\u4E8B\u52A1\u9884\u7559\n\u6309\u5F53\u524D\u9636\u6BB5\u4E0E\u89C4\u7A0B\u64CD\u4F5C",
+      "fontSize": 15,
+      "characters": 17
+    },
+    {
+      "text": "\u65E0\u9700\u5C01\u88C5",
+      "fontSize": 14,
+      "characters": 4
+    },
+    {
+      "text": "\u4FBF\u643A\u9694\u79BB\u5DE5\u5177",
+      "fontSize": 20,
+      "characters": 6
+    },
+    {
+      "text": "\u516C\u53F8\u4ED3\u5E93 \u00B7 \u552F\u4E00\u5B9E\u7269",
+      "fontSize": 17,
+      "characters": 11
+    },
+    {
+      "text": "\u5269\u4F59 1 / \u5BB9\u91CF 2 \u00B7 \u9884\u7559\u4E0D\u7B49\u4E8E\u6D88\u8017",
+      "fontSize": 17,
+      "characters": 21
+    },
+    {
+      "text": "\u672A\u88AB\u4E8B\u52A1\u9884\u7559\n\u5DE5\u7A0B\u5F85\u751F\u6548 \u00B7 \u7B2C 2 \u65E5\u53EF\u7528",
+      "fontSize": 15,
+      "characters": 22
+    }
+  ],
+  "buttons": []
+}
