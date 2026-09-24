@@ -20,6 +20,16 @@ Joy 是由 **bddfs** 四人团队共同开发的游戏项目，目前名称为�
 
 策划案与需求文档分别编号。资源账以需求第 15 节的修正为准；本版的实际测试证据与仍未完成的验收分别记录在 [M2 实施说明](docs/implementation-m2.md)，自动测试不替代首次真人推理与玩法取舍观察。
 
+## 游戏百科
+
+[Joy Wiki · 异常回收公司百科](docs/wiki/README.md) 收录当前 M2 已定义的地点、房间、异常、卡牌、实物、合同、经营系统和路线参考，共 9 页，含完整剧透。百科将当前可用内容、历史 Legacy 与完整版本规划分别标注，并记录文档和实现之间的差异。
+
+- [地点与房间](docs/wiki/locations.md) · [异常与威胁](docs/wiki/anomalies.md) · [卡牌与基础行动](docs/wiki/cards.md)
+- [物品与工具](docs/wiki/items.md) · [合同与事务](docs/wiki/contracts.md) · [经营、状态与存档](docs/wiki/mechanics.md)
+- [入门与路线参考](docs/wiki/walkthrough.md) · [版本、来源与规划](docs/wiki/sources.md)
+
+[下载完整百科压缩包](output/Joy_Wiki_M2_v1.0.zip)，解压后从 `Joy_Wiki/README.md` 开始阅读。
+
 ## 团队协作
 
 - 四名开发者使用 ChatGPT 辅助讨论与开发，通过 GitHub 协作。
@@ -28,6 +38,8 @@ Joy 是由 **bddfs** 四人团队共同开发的游戏项目，目前名称为�
 
 ## 美术与音频
 
+- [美术与界面需求规格 v0.1](docs/requirements/Joy_美术与界面需求规格说明书_v0.1.md) · [PDF 审阅版](output/pdf/Joy_美术与界面需求规格说明书_v0.1.pdf)。独立配套游戏需求 v0.3，包含 32 条需求、15 个验收场景及首轮资产状态清单；明确已知信息、经营状态、卡牌、物品和日结的呈现边界。当前为评审稿，视觉取舍与验收仍待确认或执行。
+- [整体美术风格提案 v0.1](docs/design/美术风格提案_v0.1.md) · [高清风格样板](output/art/joy-art-board-v0.1.png)。以“深空星图 × 都市怪谈 × 公司档案”为方向，包含配色、地图状态、现场、卡牌、动效及生成提示词；当前为供讨论的概念提案，尚未冻结，也不是实机界面。
 - 美术主要由 AI 生成，或以团队手绘作品为基础进行 AI 润色。
 - 音频初期以简单的背景音乐满足基本体验。
 
