@@ -1,0 +1,27 @@
+{
+  "releaseId": 395466706,
+  "tag": "v0.3.0-art.1",
+  "url": "https://github.com/bddfs/Joy/releases/tag/v0.3.0-art.1",
+  "publishedAt": "2026-09-24T08:10:59Z",
+  "prerelease": true,
+  "sourceCommit": "afd9c0bf3043c984230993667e99baa5913f0344",
+  "assets": [
+    {
+      "id": 585467500,
+      "name": "Joy-v0.3.0-art.1-windows-x64.zip",
+      "size": 97395813,
+      "state": "uploaded",
+      "digest": "sha256:e03afa609bb2e086752fe56eca3ab5a796926c3b25adb474c2044b16d74f0931",
+      "browser_download_url": "https://github.com/bddfs/Joy/releases/download/v0.3.0-art.1/Joy-v0.3.0-art.1-windows-x64.zip"
+    },
+    {
+      "id": 585467833,
+      "name": "SHA256SUMS.txt",
+      "size": 100,
+      "state": "uploaded",
+      "digest": "sha256:5a061982512db21bd36bafd886956ec0f3ad668580ff12989495c7b1302d6c60",
+      "browser_download_url": "https://github.com/bddfs/Joy/releases/download/v0.3.0-art.1/SHA256SUMS.txt"
+    }
+  ],
+  "verification": "GitHub asset sizes and SHA-256 digests match the previously tested local files. Release tag matches package sourceCommit."
+}

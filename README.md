@@ -50,7 +50,7 @@ Joy 是由 **bddfs** 四人团队共同开发的游戏项目，目前名称为�
 
 ## 运行说明
 
-本轮以本地 **Joy-v0.3.0-art.1-windows-x64.zip** 交付试玩，实现同步到 [codex/art-ui-v01 分支](https://github.com/bddfs/Joy/tree/codex/art-ui-v01)。取得 ZIP 后完整解压并运行 `Joy.exe`，保留目录中的全部文件；旁附的 `SHA256SUMS.txt` 用于校验。Windows 包采用自包含运行时，无需安装 Godot、.NET SDK 或另装运行时。范围和存档说明见 [本版试玩说明](docs/releases/v0.3.0-art.1.md)，打包与解压验证记录见 [实施说明](docs/art/implementation-v0.1.md)；[M2.1 试玩说明](docs/releases/v0.3.0-m2.1.md) 保留为历史记录。
+从 [v0.3.0-art.1 GitHub Release](https://github.com/bddfs/Joy/releases/tag/v0.3.0-art.1) 下载 **Joy-v0.3.0-art.1-windows-x64.zip** 与校验附件 **SHA256SUMS.txt**，实现源码见 [codex/art-ui-v01 分支](https://github.com/bddfs/Joy/tree/codex/art-ui-v01)。完整解压 ZIP 后运行 `Joy.exe`，保留目录中的全部文件。Windows 包采用自包含运行时，无需安装 Godot、.NET SDK 或另装运行时。范围和存档说明见 [本版试玩说明](docs/releases/v0.3.0-art.1.md)，打包与解压验证记录见 [实施说明](docs/art/implementation-v0.1.md)；[M2.1 试玩说明](docs/releases/v0.3.0-m2.1.md) 保留为历史记录。
 
 在当前 Windows 便携环境，双击仓库上一级的 **Play-Joy.cmd** 即可编译并启动，**Test-Joy.cmd** 运行回归检查；通过 **Open-Godot.cmd** 在编辑器打开工程后按 F6/F5 运行也可以。
 
