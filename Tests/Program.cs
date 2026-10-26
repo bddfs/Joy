@@ -8,9 +8,10 @@ void Check(bool condition, string description)
 }
 foreach (var suite in new (string Name, Action<Action<bool, string>> Run)[]
 {
-    ("City", CityTests.Run), ("M2 City", M2CityTests.Run), ("Field", FieldTests.Run), ("M2 Field", M2FieldTests.Run), ("Disturbance", DisturbanceTests.Run), ("Ward clip", WardClipTests.Run), ("Save", SaveTests.Run), ("Integration", IntegrationTests.Run), ("M2 integration", M2IntegrationTests.Run), ("Art presentation", ArtPresentationTests.Run)
+    ("City", CityTests.Run), ("M2 City", M2CityTests.Run), ("Field", FieldTests.Run), ("M2 Field", M2FieldTests.Run), ("Disturbance", DisturbanceTests.Run), ("Ward clip", WardClipTests.Run), ("Save", SaveTests.Run), ("Integration", IntegrationTests.Run), ("M2 integration", M2IntegrationTests.Run), ("Art presentation", ArtPresentationTests.Run), ("Grid Prototype", GridPrototypeTests.Run)
 })
 {
+    if (args.Contains("--grid-only") && suite.Name != "Grid Prototype") continue;
     int before = passed;
     try { suite.Run(Check); Console.WriteLine($"{suite.Name} | {passed - before} checks passed"); }
     catch (Exception exception) { failed++; Console.WriteLine($"FAIL | {suite.Name} | {exception}"); }

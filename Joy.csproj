@@ -5,8 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Joy</RootNamespace>
-    <Version>0.3.0-art.1</Version>
-    <FileVersion>0.3.0.2</FileVersion>
+    <Version>0.4.0-grid.1</Version>
+    <FileVersion>0.4.0.1</FileVersion>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Tests/**/*.cs" />

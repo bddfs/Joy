@@ -117,10 +117,10 @@ Joy v$joyVersion - Windows 64 位开发者试玩版
 请保留 Joy.pck、data_Joy_windows_x86_64 和其它随附文件。
 已包含 .NET 运行时；无需安装 Godot 编辑器、.NET SDK 或另行下载运行时。
 
-这是接入 P1–P5 美术与界面候选的 M2 单城原型预发行版本，尚未获得最终人工审美批准。
+这是网格地图、角色构筑和全卡牌操作的独立玩法原型，版本 $joyVersion。
 试玩内容、操作提示与反馈建议见 PLAYTEST.md，游戏内也有操作手册。
-存档自动保存在 %APPDATA%\Godot\app_userdata\Joy · 异常回收公司\profile-m2。
-兼容已有 v2 存档；历史 profile 目录保留、不混读。
+存档自动保存在 %APPDATA%\Godot\app_userdata\Joy · 异常回收公司\grid-prototype-v1。
+本原型使用独立存档；旧 M2 试玩进度保留、不混读。
 反馈时请附经营日、种子、操作顺序、截图及 build-info.json 中的 sourceCommit。
 
 包内中文字体采用 Noto Sans CJK。Godot、.NET 与字体许可见 Licenses 目录。
