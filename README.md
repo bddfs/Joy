@@ -2,7 +2,7 @@
 
 当前分支 `codex/grid-card-prototype` 是 **v0.4.0-grid.2 天赋树试玩版**。
 
-[上一版 Windows 试玩包](https://github.com/bddfs/Joy/releases/tag/v0.4.0-grid.1)；本版更新说明见 [天赋树试玩说明](docs/releases/v0.4.0-grid.2.md)。
+[下载天赋树 Windows 试玩版](https://github.com/bddfs/Joy/releases/tag/v0.4.0-grid.2)：完整解压后运行 `Joy.exe`。本版更新说明见 [天赋树试玩说明](docs/releases/v0.4.0-grid.2.md)。
 
 ## 本版方向
 
