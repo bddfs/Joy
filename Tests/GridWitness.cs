@@ -8,6 +8,69 @@ namespace Joy.Tests;
 /// <summary>Public-API-only campaign witness. No state injection is permitted here.</summary>
 public static class GridWitness
 {
+    /// <summary>Exports a real earned checkpoint for independent UI verification, using only public gameplay commands.</summary>
+    public static GridGame CreateTalentUiCheckpoint()
+    {
+        var g = GridEngine.NewGame(413); var e = new GridEngine(g);
+        var played = new HashSet<string>(); var turns = new List<string>();
+        GridPrototypeTests.Need(e.LearnTalent("mapper", "mapper-a1"));
+        GridPrototypeTests.Need(e.LearnTalent("warden", "warden-a1"));
+        GridPrototypeTests.Need(e.LearnTalent("warden", "warden-a2"));
+        Rebuild(e, "mapper", new[] { "sprint", "sprint", "shot", "shot", "mark", "mark", "survey", "lure" });
+        Rebuild(e, "warden", new[] { "soothe", "soothe", "quick-capture", "quick-capture", "escort", "escort", "bind", "heal" });
+        Mission(e, "hotel", played, turns);
+        return g;
+    }
+
+    /// <summary>Earns the third point from a real contract, unlocks an actual tree leaf,
+    /// deliberately installs the resulting card, draws and uses it in the next mission.</summary>
+    public static void RunTalentUnlock(Action<bool, string> check)
+    {
+        var g = GridEngine.NewGame(413); var e = new GridEngine(g);
+        var played = new HashSet<string>(); var turns = new List<string>();
+        GridPrototypeTests.Need(e.LearnTalent("mapper", "mapper-a1"));
+        GridPrototypeTests.Need(e.LearnTalent("warden", "warden-a1"));
+        GridPrototypeTests.Need(e.LearnTalent("warden", "warden-a2"));
+        Rebuild(e, "mapper", new[] { "sprint", "sprint", "shot", "shot", "mark", "mark", "survey", "lure" });
+        Rebuild(e, "warden", new[] { "soothe", "soothe", "quick-capture", "quick-capture", "escort", "escort", "bind", "heal" });
+        Mission(e, "hotel", played, turns);
+        check(g.Hero("warden").SkillPoints == 1 && g.Site("hotel").Cleared && g.Assets.Any(a => a.Id == "bell"),
+            "Talent witness: a successful first expedition earns the point needed for a deeper tree node");
+        GridPrototypeTests.Need(e.LearnTalent("warden", "warden-a3"));
+        check(g.Hero("warden").SkillPoints == 0 && e.GetAvailableDeckCards("warden").Any(c => c.Id == "pact"),
+            "Talent witness: real earned progression unlocks the signature library option");
+        Rebuild(e, "warden", new[] { "pact", "pact", "soothe", "quick-capture", "quick-capture", "escort", "bind", "heal" });
+        GridPrototypeTests.Need(e.StartMission("hospital"));
+        bool used = false; int guard = 0;
+        while (g.Phase == "field" && !used && guard++ < 100)
+        {
+            var f = g.Field!; bool acted = false;
+            foreach (var actor in f.Actors.ToArray())
+            {
+                if (actor.HeroId == "warden" && actor.Hand.Contains("pact"))
+                {
+                    foreach (var target in f.Enemies.Where(x => x.Alive && x.Health > 1).OrderBy(x => x.Cell.Distance(actor.Cell)))
+                    {
+                        int hp = target.Health;
+                        if (Try(e, actor, "pact", target.Cell, played))
+                        {
+                            check(target.Alive && target.Health >= 1 && target.Health < hp && target.MarkedUntil >= f.Round,
+                                "Talent witness: a naturally drawn signature card changes a real enemy while preserving it for capture");
+                            used = true; break;
+                        }
+                    }
+                }
+                if (used || g.Phase != "field") break;
+                if (Act(e, actor, played)) acted = true;
+            }
+            if (!used && !acted && g.Phase == "field")
+                GridPrototypeTests.Need(e.Play(f.Actors[0].HeroId, "end", f.Actors[0].Cell));
+        }
+        check(used && played.Contains("pact"),
+            "Talent witness: new game to earned node to chosen deck to drawn-and-played signature succeeds without injected resources");
+        Console.WriteLine($"TALENT_WITNESS | day {g.Day} | nodes {string.Join(',', g.Hero("warden").LearnedTalents)} | pact played {used} | {string.Join(" / ", turns)}");
+    }
+
     public static void Run(Action<bool, string> check)
     {
         var g = GridEngine.NewGame(413); var e = new GridEngine(g);

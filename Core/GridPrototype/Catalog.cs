@@ -8,9 +8,9 @@ public static class Catalog
 {
     public static readonly IReadOnlyList<HeroDef> Heroes = new[]
     {
-        new HeroDef("mapper", "林舟", "测绘员", "80cbd0", "留守：每次归队额外收入 2；远行专精每级再 +1。", "远行", "行进可多走 1 格；二级疾走再 +1 格。留守收入每级 +1。", "协同", "标定额外使敌人停顿；二级标定使队伍下一次伤害 +1。留守额外收入 +2。"),
-        new HeroDef("engineer", "许灯", "灯光工程师", "e8bb73", "留守：每次归队修复一段封闭道路；值守专精恢复留库异常 1 次。", "巡灯", "布灯范围 +1，持续时间 +1 轮；二级疾走 +1 格。留守照常修路。", "值守", "灯区内角色受到的攻击减少 1；二级持续照明再 +1 轮。留守恢复留库异常 1 次。"),
-        new HeroDef("warden", "陈墨", "收容官", "b29cd9", "留守：全员归队恢复 3 生命，收容工具补充 1（上限 4）。", "交涉", "可收容生命不高于 4 的目标；二级收容范围 +1。留守恢复生命额外 +1。", "封锁", "束缚持续时间 +1 轮；二级收容消耗 1 行动。留守补充工具额外 +1。")
+        new HeroDef("mapper", "林舟", "测绘员", "80cbd0", "留守：基础收入 +2；轻捷步伐与远行规划各再 +1，压制标记再 +2。", "远行", "改善行进与疾走，最终解锁探路疾行。", "协同", "改变标定的压制与协同作用，最终解锁联动标定。"),
+        new HeroDef("engineer", "许灯", "灯光工程师", "e8bb73", "留守：每次归队修复一段封闭道路；点亮值守灯区后，为留库异常恢复 1 次。", "巡灯", "改善布灯与移动，最终解锁随行灯。", "值守", "强化灯区防御与持续时间，最终解锁防护穹顶。"),
+        new HeroDef("warden", "陈墨", "收容官", "b29cd9", "留守：全员恢复 3 生命、工具 +1（上限 4）；交涉窗口恢复再 +1，持续束缚工具再 +1。", "交涉", "改善收容条件与范围，最终解锁安抚协议。", "封锁", "强化束缚、降低收容费用，最终解锁封锁阵。")
     };
     public static readonly IReadOnlyList<AssetDef> Assets = new[]
     {
@@ -50,6 +50,15 @@ public static class Catalog
         new CardDef("soothe", "镇静", "warden", 1, 3, "enemy", "使可见目标损失 2 生命并被标定；保留其可收容身份。", "card-mimic"),
         new CardDef("heal", "急救", "warden", 1, 2, "ally", "为可见队友恢复 4 生命。", "item-kit"),
         new CardDef("escort", "护送", "warden", 1, 2, "cell", "沿通路移动最多 2 格，并获得 1 防护。", "card-mimic"),
+        new CardDef("trailblaze", "探路疾行", "mapper", 1, 3, "cell", "沿通路移动最多 3 格，再自动调查落点相邻一处未读线索。", "card-investigate"),
+        new CardDef("chain-mark", "联动标定", "mapper", 1, 4, "enemy", "标定目标及其相邻可见敌人；沿用压制标记和协同破绽效果。", "card-investigate"),
+        new CardDef("piercing-shot", "贯穿投射", "mapper", 2, 5, "enemy", "沿横纵直线，对目标及其正后方一格的敌人分别造成 3 基础伤害；标定可提高伤害。", "card-mimic"),
+        new CardDef("mobile-light", "随行灯", "engineer", 1, 2, "cell", "沿通路移动最多 2 格，并在落点建立半径 1 的灯区，沿用照明天赋。", "card-light"),
+        new CardDef("light-dome", "防护穹顶", "engineer", 1, 3, "cell", "建立半径 1 的灯区，并为其中队员各提供 3 防护，沿用照明天赋。", "card-light"),
+        new CardDef("chain-arc", "连锁电弧", "engineer", 2, 3, "enemy", "对目标及其相邻可见敌人分别造成 2 基础伤害；标定可提高伤害。", "card-light"),
+        new CardDef("pact", "安抚协议", "warden", 1, 3, "enemy", "造成 3 基础伤害，至少保留目标 1 生命，并标定目标至下一轮。", "card-mimic"),
+        new CardDef("seal-circle", "封锁阵", "warden", 1, 3, "cell", "让目标格半径 1 内可见敌人停顿 2 次敌方行动，满足收容控制条件。", "item-kit"),
+        new CardDef("team-aid", "全队急救", "warden", 2, 0, "self", "为两名外勤各恢复 4 生命，并各提供 1 防护。", "item-kit"),
         new CardDef("asset-bell", "异常 · 响铃", "asset", 0, 6, "cell", "消耗回声铃 1 次，牵引听觉型敌人；不消耗角色行动。", "item-clock"),
         new CardDef("asset-wardrobe", "异常 · 折叠门", "asset", 1, 0, "self", "消耗衣柜 1 次，将自己转移到入口附近的空格。", "node-hotel"),
         new CardDef("asset-pain", "异常 · 代受", "asset", 0, 0, "self", "消耗食痛者 1 次，队伍获得 4 点共享伤害吸收。", "item-kit")
@@ -58,4 +67,5 @@ public static class Catalog
     public static HeroDef Hero(string id) => Heroes.First(h => h.Id == id);
     public static AssetDef Asset(string id) => Assets.First(a => a.Id == id);
     public static IReadOnlyList<CardDef> DeckOptions(string heroId) => Cards.Where(c => c.Owner == heroId).ToArray();
+    public static IReadOnlyList<CardDef> StartingOptions(string heroId) => DeckOptions(heroId).Where(c => !TalentCatalog.Nodes.Any(n => n.UnlockCardId == c.Id)).ToArray();
 }

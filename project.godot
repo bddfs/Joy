@@ -3,7 +3,7 @@ config_version=5
 
 [application]
 config/name="Joy · 异常回收公司"
-config/version="0.4.0-grid.1"
+config/version="0.4.0-grid.2"
 run/main_scene="res://Scenes/GridPrototype.tscn"
 config/features=PackedStringArray("4.7", "C#", "GL Compatibility")
 

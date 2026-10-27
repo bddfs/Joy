@@ -119,8 +119,8 @@ Joy v$joyVersion - Windows 64 位开发者试玩版
 
 这是网格地图、角色构筑和全卡牌操作的独立玩法原型，版本 $joyVersion。
 试玩内容、操作提示与反馈建议见 PLAYTEST.md，游戏内也有操作手册。
-存档自动保存在 %APPDATA%\Godot\app_userdata\Joy · 异常回收公司\grid-prototype-v1。
-本原型使用独立存档；旧 M2 试玩进度保留、不混读。
+存档自动保存在 %APPDATA%\Godot\app_userdata\Joy · 异常回收公司\grid-prototype-v2。
+首次继续可导入旧网格版进度，将专精映射为天赋节点，原v1文件保留。旧M2试玩进度独立。
 反馈时请附经营日、种子、操作顺序、截图及 build-info.json 中的 sourceCommit。
 
 包内中文字体采用 Noto Sans CJK。Godot、.NET 与字体许可见 Licenses 目录。

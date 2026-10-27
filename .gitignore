@@ -19,6 +19,7 @@ Thumbs.db
 # Build output and local secrets
 /builds/
 /exports/
+/tmp/
 .env
 .env.*
 !.env.example

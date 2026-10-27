@@ -47,11 +47,14 @@ public static class GridPrototypeTests
         check(!e.ToggleHero("missing-hero").Success && Json(g) == before,
             "Grid: invalid hero does not alter dispatch");
         Need(e.LearnSkill("mapper", "a"));
-        check(g.Hero("mapper").SkillPoints == 0 && g.Hero("mapper").SkillLevel == 1 && g.Hero("mapper").Specialization == "a",
-            "Grid: a specialization spends the starting point and records its branch");
+        check(g.Hero("mapper").SkillPoints == 1 && g.Hero("mapper").LearnedTalents.Contains("mapper-a1"),
+            "Grid: a talent spends one of two starting points and records its node");
+        Need(e.LearnSkill("mapper", "b"));
+        check(g.Hero("mapper").SkillPoints == 0 && g.Hero("mapper").LearnedTalents.Contains("mapper-b1"),
+            "Grid: separate tree branches can receive points in the same build");
         before = Json(g);
         check(!e.LearnSkill("mapper", "b").Success && Json(g) == before,
-            "Grid: a second branch cannot be silently granted");
+            "Grid: exhausted talent points cannot silently grant the next node");
         string removed = g.Hero("mapper").Deck.First();
         check(!e.ChangeDeck("mapper", removed, "bind").Success && Json(g) == before,
             "Grid: deck editing cannot insert another character's ability");
@@ -124,7 +127,7 @@ public static class GridPrototypeTests
         before = Json(g);
         check(!e.Preview(a.HeroId, "move", new Cell(3, 3)).Success && Json(g) == before,
             "Grid: untrained actor cannot move two cells with basic move");
-        g.Hero("mapper").Specialization = "a"; g.Hero("mapper").SkillLevel = 1;
+        g.Hero("mapper").LearnedTalents.Add("mapper-a1");
         Need(e.Play(a.HeroId, "move", new Cell(3, 3)));
         check(a.Cell == new Cell(3, 3) && a.Actions == 1,
             "Grid: mapper travel specialization actually changes movement reach");

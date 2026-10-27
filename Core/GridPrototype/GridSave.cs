@@ -31,7 +31,11 @@ public static class GridSave
                 stream.Write(bytes);
                 stream.Flush(true);
             }
-            if (File.Exists(path)) File.Replace(temporary, path, path + ".bak", true);
+            if (File.Exists(path))
+            {
+                PreserveLegacyFile(path);
+                File.Replace(temporary, path, path + ".bak", true);
+            }
             else File.Move(temporary, path);
             return Result.Ok("进度已保存");
         }
@@ -44,39 +48,73 @@ public static class GridSave
     {
         message = "还没有此原型的存档。";
         if (!File.Exists(path)) return null;
-        try { var game = Read(path); message = "已恢复上次完整操作。"; return game; }
+        try { var game = Read(path, out bool migrated); message = migrated ? "已恢复旧进度，原专精已映射为天赋节点；技能点保持不变。" : "已恢复上次完整操作。"; return game; }
         catch (NotSupportedException e) { message = e.Message; return null; }
         catch (Exception e) when (e is IOException or UnauthorizedAccessException or JsonException or InvalidDataException or ArgumentException)
         {
             message = "主存档无法读取：" + e.Message;
             if (File.Exists(path + ".bak"))
-                try { var game = Read(path + ".bak"); message = "主存档损坏，已恢复上一份备份。"; return game; }
+                try { var game = Read(path + ".bak", out bool migrated); message = "主存档损坏，已恢复上一份备份。" + (migrated ? "原专精已映射为天赋节点。" : ""); return game; }
                 catch (Exception backup) when (backup is IOException or UnauthorizedAccessException or JsonException or InvalidDataException or ArgumentException or NotSupportedException)
                 { message += "；备份也无法读取。"; }
             return null;
         }
     }
-    private static GridGame Read(string path)
+    private static GridGame Read(string path, out bool migrated)
     {
+        migrated = false;
         if (new FileInfo(path).Length > 4_000_000) throw new InvalidDataException("存档大小异常。");
         var wrapper = JsonSerializer.Deserialize<Envelope>(File.ReadAllText(path, Encoding.UTF8), Options)
             ?? throw new InvalidDataException("存档为空。");
         if (wrapper.Format != 1) throw new NotSupportedException("此存档来自其他版本，未覆盖原文件。");
         if (wrapper.Hash != Hash(wrapper.Payload)) throw new InvalidDataException("校验不一致。");
         var game = JsonSerializer.Deserialize<GridGame>(wrapper.Payload, Options) ?? throw new InvalidDataException("没有游戏状态。");
-        if (game.Version != 1) throw new NotSupportedException("此进度版本尚不支持，未覆盖原文件。");
+        if (game.Version is not (1 or 2)) throw new NotSupportedException("此进度版本尚不支持，未覆盖原文件。");
+        if (game.Version == 1)
+        {
+            if (game.Heroes is null || game.Heroes.Any(h => h is null)) throw new InvalidDataException("旧角色记录无效。");
+            foreach (var hero in game.Heroes)
+            {
+                if (hero.Specialization is not ("" or "a" or "b") || hero.SkillLevel < 0 || hero.SkillLevel > 2 ||
+                    (hero.Specialization == "") != (hero.SkillLevel == 0) || hero.LearnedTalents is null || hero.LearnedTalents.Count != 0)
+                    throw new InvalidDataException("旧专精记录无效，未迁移。");
+                for (int level = 1; level <= hero.SkillLevel; level++) hero.LearnedTalents.Add($"{hero.Id}-{hero.Specialization}{level}");
+            }
+            game.Version = 2;
+            migrated = true;
+        }
         Validate(game);
         return game;
     }
     private static string Hash(string value) => Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(value)));
+    private static void PreserveLegacyFile(string path)
+    {
+        if (File.Exists(path + ".v1-backup")) return;
+        foreach (var candidate in new[] { path, path + ".bak" })
+        {
+            if (!File.Exists(candidate)) continue;
+            try
+            {
+                var wrapper = JsonSerializer.Deserialize<Envelope>(File.ReadAllText(candidate, Encoding.UTF8), Options);
+                if (wrapper is null || wrapper.Hash != Hash(wrapper.Payload)) continue;
+                using var json = JsonDocument.Parse(wrapper.Payload);
+                if (json.RootElement.TryGetProperty("Version", out var version) && version.TryGetInt32(out int number) && number == 1)
+                {
+                    File.Copy(candidate, path + ".v1-backup", false);
+                    return;
+                }
+            }
+            catch (JsonException) { /* A damaged file is not a valid migration backup. */ }
+        }
+    }
     private static void Validate(GridGame game)
     {
-        if (game.Version != 1 || game.Day < 1 || game.Day > 100 || game.Money < 0 || game.Money > 100000 || game.SealCharges < 0)
+        if (game.Version != 2 || game.Day < 1 || game.Day > 100 || game.Money < 0 || game.Money > 100000 || game.SealCharges < 0)
             throw new InvalidDataException("经营状态无效。");
         if (game.Phase is not ("city" or "field" or "victory" or "defeat") || (game.Phase == "field") != (game.Field is not null))
             throw new InvalidDataException("当前阶段与现场记录不一致。");
         if (game.Heroes is null || game.City is null || game.Assets is null || game.SelectedHeroes is null || game.Journal is null ||
-            game.Heroes.Count != 3 || game.Heroes.Select(h => h.Id).Distinct().Count() != 3 ||
+            game.Heroes.Count != 3 || game.Heroes.Any(h => h is null) || game.Heroes.Select(h => h.Id).Distinct().Count() != 3 ||
             game.Heroes.Any(h => h.Id is not ("mapper" or "engineer" or "warden") || h.Health < 0 || h.Health > h.MaxHealth || h.MaxHealth <= 0 || h.SkillPoints < 0 || h.Deck is null))
             throw new InvalidDataException("角色记录无效。");
         if (game.City.Count != 35 || game.City.Any(t => t.X < 0 || t.X >= 7 || t.Y < 0 || t.Y >= 5) || game.City.Select(t => t.Cell).Distinct().Count() != 35)
@@ -87,9 +125,15 @@ public static class GridSave
             throw new InvalidDataException("随队收容物不存在。");
         foreach (var hero in game.Heroes)
         {
+            if (hero.LearnedTalents is null || hero.LearnedTalents.Distinct().Count() != hero.LearnedTalents.Count ||
+                hero.LearnedTalents.Any(id => !TalentCatalog.Nodes.Any(n => n.Id == id && n.HeroId == hero.Id)))
+                throw new InvalidDataException("天赋节点记录无效。");
+            foreach (var id in hero.LearnedTalents)
+                if (TalentCatalog.Node(id).Prerequisites.Any(required => !hero.LearnedTalents.Contains(required)))
+                    throw new InvalidDataException("天赋节点缺少前置。");
             if (hero.Specialization is not ("" or "a" or "b") || hero.SkillLevel < 0 || hero.SkillLevel > 2 ||
                 (hero.Specialization == "") != (hero.SkillLevel == 0) || hero.Deck.Count < 6 || hero.Deck.Count > 10 ||
-                hero.Deck.GroupBy(id => id).Any(g => g.Count() > 2) || hero.Deck.Any(id => !Catalog.Cards.Any(c => c.Id == id && c.Owner == hero.Id)))
+                hero.Deck.GroupBy(id => id).Any(g => g.Count() > 2) || hero.Deck.Any(id => !Catalog.Cards.Any(c => c.Id == id && c.Owner == hero.Id) || !TalentCatalog.IsCardUnlocked(hero, id)))
                 throw new InvalidDataException("专精或个人牌组无效。");
         }
         if (game.SelectedHeroes.Count > 2 || game.SelectedHeroes.Distinct().Count() != game.SelectedHeroes.Count || game.SelectedHeroes.Any(id => !game.Heroes.Any(h => h.Id == id)))
@@ -102,7 +146,7 @@ public static class GridSave
             foreach (var a in f.Actors)
                 if (!game.Heroes.Any(h => h.Id == a.HeroId) || a.X < 0 || a.X >= f.Width || a.Y < 0 || a.Y >= f.Height || a.Actions < 0 || a.Actions > 20 ||
                     a.Hand is null || a.Draw is null || a.Discard is null ||
-                    a.Hand.Concat(a.Draw).Concat(a.Discard).Any(id => !Catalog.Cards.Any(c => c.Id == id && c.Owner == a.HeroId)))
+                    a.Hand.Concat(a.Draw).Concat(a.Discard).Any(id => !Catalog.Cards.Any(c => c.Id == id && c.Owner == a.HeroId) || !TalentCatalog.IsCardUnlocked(game.Hero(a.HeroId), id)))
                     throw new InvalidDataException("现场队员状态无效。");
             if (f.Enemies.Select(e => e.Id).Distinct().Count() != f.Enemies.Count || f.Enemies.Any(e => e.X < 0 || e.X >= f.Width || e.Y < 0 || e.Y >= f.Height))
                 throw new InvalidDataException("现场目标状态无效。");

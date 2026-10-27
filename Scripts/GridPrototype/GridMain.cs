@@ -16,19 +16,21 @@ public partial class GridMain : Control
     private string _page = "dispatch", _notice = "", _hero = "mapper", _card = "", _site = "hotel";
     private Cell _target = new(0, 3), _cityCell = new(2, 1);
     private bool _welcome = true, _capture, _saveFailed;
-    private string _savePath = "", _captureName = "", _capturePath = "";
+    private string _savePath = "", _legacySavePath = "", _captureName = "", _capturePath = "";
     private GridBoard? _board;
 
     public override void _Ready()
     {
-        GetWindow().Title = "Joy · 异常回收公司 / GRID 01";
+        GetWindow().Title = "Joy · 异常回收公司 / GRID 02 · 天赋树";
         GetWindow().MinSize = new Vector2I(1280, 720);
-        _savePath = ProjectSettings.GlobalizePath("user://grid-prototype-v1/save.json");
+        _savePath = ProjectSettings.GlobalizePath("user://grid-prototype-v2/save.json");
+        _legacySavePath = ProjectSettings.GlobalizePath("user://grid-prototype-v1/save.json");
         Theme = CreateTheme();
         var args = OS.GetCmdlineUserArgs();
         if (args.Contains("--grid-ui-test"))
         {
-            _savePath = ProjectSettings.GlobalizePath("user://grid-prototype-ui-test/save.json");
+            _savePath = ProjectSettings.GlobalizePath("user://grid-talents-ui-test/save.json");
+            _legacySavePath = "";
             GetWindow().Title += " / QA";
         }
         _captureName = args.FirstOrDefault(a => a.StartsWith("--grid-capture="))?.Split('=', 2)[1] ?? "";
@@ -43,6 +45,21 @@ public partial class GridMain : Control
     {
         _game = GridEngine.NewGame(); _engine = new(_game); _welcome = false;
         if (_captureName is "skills" or "assets") _page = _captureName;
+        if (_captureName.StartsWith("talents"))
+        {
+            _page = "skills";
+            _talentHero = _captureName == "talents-engineer" ? "engineer" : _captureName == "talents-warden" ? "warden" : "mapper";
+            _talentNode = _talentHero + "-a1";
+            if (_captureName is "talents-lit" or "talents-deck")
+            {
+                // Display-only fixture, isolated from every saved game.
+                _game.Hero(_talentHero).SkillPoints = 7;
+                foreach (var suffix in new[] { "a1", "a2", "a3", "b1", "c1", "c2" }) _engine.LearnTalent(_talentHero, _talentHero + "-" + suffix);
+                _talentNode = _talentHero + "-a3";
+                _deckCard = TalentCatalog.Node(_talentNode).UnlockCardId;
+                if (_captureName == "talents-deck") _talentTab = "deck";
+            }
+        }
         if (_captureName == "assets")
             foreach (var asset in Catalog.Assets) if (!_game.Assets.Any(a => a.Id == asset.Id)) _game.Assets.Add(new() { Id = asset.Id });
         if (_captureName is "field" or "combat")
@@ -93,15 +110,18 @@ public partial class GridMain : Control
     private void NewGame()
     {
         _game = GridEngine.NewGame(); _engine = new(_game); _welcome = false; _page = "dispatch"; _card = ""; _hero = "mapper";
-        _notice = "先选两名外勤，再从城市地块选择任务。每位角色有 1 点初始技能，可在「角色成长」中选择专精。";
+        _talentHero = "mapper"; _talentNode = "mapper-a1"; _talentTab = "tree"; _deckCard = "";
+        _notice = "每位角色有 2 点初始天赋。先到「角色成长」点亮节点、配置牌组，再选择两名外勤与任务。";
         Save(); Render();
     }
     private void Continue()
     {
-        var loaded = GridSave.Load(_savePath, out var message);
+        var loadPath = File.Exists(_savePath) ? _savePath : _legacySavePath;
+        var loaded = GridSave.Load(loadPath, out var message);
         if (loaded is null) { _notice = message; Render(); return; }
         _game = loaded; _engine = new(_game); _welcome = false; _notice = message;
         if (_game.Field is not null) _hero = _game.Field.Actors[0].HeroId;
+        if (loadPath != _savePath) Save();
         Render();
     }
     private void Save()
@@ -140,14 +160,14 @@ public partial class GridMain : Control
         feedback.TextOverrunBehavior = TextServer.OverrunBehavior.TrimEllipsis;
         feedback.TooltipText = feedback.Text;
         footrow.AddChild(feedback);
-        footrow.AddChild(L(_capture ? "预览场景" : _saveFailed ? "保存失败" : _game is not null ? "自动保存 / GRID 01" : "玩法原型 / 0.4", 16, _saveFailed ? Red : Muted));
+        footrow.AddChild(L(_capture ? "预览场景" : _saveFailed ? "保存失败" : _game is not null ? "自动保存 / GRID 02" : "玩法原型 / 天赋树", 16, _saveFailed ? Red : Muted));
         _root.AddChild(footer);
     }
     private void Header()
     {
         var row = H(18); _root.AddChild(row);
         var title = V(0); title.SizeFlagsHorizontal = SizeFlags.ExpandFill; row.AddChild(title);
-        title.AddChild(L("异常回收公司", 34, Ink)); title.AddChild(L("GRID / 01     人类专长 × 异常能力", 17, Teal));
+        title.AddChild(L("异常回收公司", 34, Ink)); title.AddChild(L("GRID / 02     点亮天赋 · 改写牌组", 17, Teal));
         if (_game is not null && !_welcome)
         {
             row.AddChild(Stat("经营日", $"{_game.Day:00} / {_game.MaxDays:00}"));
@@ -164,7 +184,7 @@ public partial class GridMain : Control
         var art = Panel(); art.SizeFlagsHorizontal = SizeFlags.ExpandFill; layout.AddChild(art);
         var av = V(12); art.AddChild(av); av.AddChild(ArtAssets.Image("city", 420));
         av.AddChild(L("把怪谈，变成公司的下一种能力。", 34, Gold, true));
-        av.AddChild(L("两层网格 · 三名角色 · 独立牌组 · 技能专精 · 三处回收任务", 21, Muted, true));
+        av.AddChild(L("两层网格 · 三名角色 · 独立牌组 · 节点天赋树 · 三处回收任务", 21, Muted, true));
         var panel = Panel(); panel.CustomMinimumSize = new Vector2(510, 0); layout.AddChild(panel);
         var col = V(22); panel.AddChild(col);
         col.AddChild(L("雾港 / 七日回收计划", 30, Ink));
@@ -177,13 +197,13 @@ public partial class GridMain : Control
         {
             if (File.Exists(_savePath)) Confirm("开始新的远征？", "这会替换本原型的自动存档。", NewGame); else NewGame();
         }, true));
-        col.AddChild(B("继续远征", Continue, false, 0, !File.Exists(_savePath)));
-        col.AddChild(L("本版使用独立存档。移动和交互牌始终可用，所有现场主动操作都由打牌发动。", 18, Muted, true));
+        col.AddChild(B("继续远征", Continue, false, 0, !File.Exists(_savePath) && !File.Exists(_legacySavePath)));
+        col.AddChild(L("旧版进度可继续，天赋将迁移到新版独立存档。原文件保留；所有现场主动操作都由打牌发动。", 18, Muted, true));
     }
     private void ShowHelp()
     {
-        var dialog = new AcceptDialog { Title = "外勤手册 / GRID 01", DialogText =
-            "公司：选择恰好两名外勤，其他人留守并结算经营效果。先学专精，再按需要替换个人牌组。\n\n现场：点击角色 → 点击一张牌 → 点击目标格 → 查看预览并打出。常驻基础牌不会抽空；职业牌归属于各自角色。每人每轮 2 行动，打出「结束回合」后敌人行动、时间推进，再各抽 3 张牌。\n\n先用「搜查」取得附近线索，再观察敌人的收容条件。击败或收容目标都可完成任务，但只有收容能得到异常资产。封装消耗工具次数。\n\n撤离：两名角色都需要靠近入口，打出「撤离」。现场货物与零钱只有撤离后才入账。回合耗尽或队伍倒下会丢失本次所得。\n\n成长：完成任务获得技能点。技能有两条互斥路线，可继续提升等级；角色和异常留守或出勤时发挥不同作用。\n\n目标：七日内处理三个地点，并建立两个营业网点。成功动作后自动保存，标题可继续。", MinSize = new Vector2I(820, 550) };
+        var dialog = new AcceptDialog { Title = "外勤手册 / GRID 02", DialogText =
+            "公司：选择恰好两名外勤，其他人留守并结算经营效果。先点亮天赋，再配置个人牌组。\n\n现场：点击角色 → 点击一张牌 → 点击目标格 → 查看预览并打出。常驻基础牌不会抽空；职业牌归属于各自角色。每人每轮 2 行动，打出「结束回合」后敌人行动、时间推进，再各抽 3 张牌。\n\n先用「搜查」取得附近线索，再观察敌人的收容条件。击败或收容目标都可完成任务，但只有收容能得到异常资产。\n\n撤离：两人都靠近入口，打出「撤离」。现场所得只有撤离后才入账；失败丢失本次所得。\n\n天赋：每人初始 2 点，每个节点 1 点。沿连线满足前置，可以跨分支投入。节点分别强化卡牌数值、改变机制或解锁特色牌。完成新委托后全员再得 1 点。\n\n新牌：点亮节点后进入可配牌库，在「个人牌组」加入或替换。牌组 6–10 张，同名最多 2 张。手牌和预览显示天赋强化后的效果。\n\n目标：七日内处理三个地点，并建立两个营业网点。成功动作后自动保存，标题可继续。", MinSize = new Vector2I(850, 600) };
         AddChild(dialog); dialog.Confirmed += dialog.QueueFree; dialog.CloseRequested += dialog.QueueFree; dialog.PopupCentered();
     }
     private void Confirm(string title, string content, Action action)

@@ -93,48 +93,6 @@ public partial class GridMain
         info.AddChild(L("上次归队", 20, Teal)); info.AddChild(L(game.LastReport, 18, Muted, true));
     }
 
-    private void Skills()
-    {
-        var game = _game!;
-        var row = H(18); row.SizeFlagsVertical = SizeFlags.ExpandFill; _root.AddChild(row);
-        foreach (var hero in game.Heroes)
-        {
-            var def = Catalog.Hero(hero.Id); var panel = Panel(); panel.SizeFlagsHorizontal = SizeFlags.ExpandFill; row.AddChild(panel);
-            var col = V(12); panel.AddChild(Scroll(col));
-            col.AddChild(L(hero.Name + " / " + hero.Role, 28, new Color(def.Color)));
-            col.AddChild(L($"可用技能点 {hero.SkillPoints}  ·  专精等级 {hero.SkillLevel}", 20, Gold));
-            col.AddChild(L(def.CompanyEffect, 19, Muted, true));
-            foreach (var branch in new[] { "a", "b" })
-            {
-                string name = branch == "a" ? def.BranchA : def.BranchB, desc = branch == "a" ? def.BranchAText : def.BranchBText;
-                var box = Panel(hero.Specialization == branch ? new Color("23413e") : new Color("182536"));
-                var bcol = V(6); box.AddChild(bcol);
-                bcol.AddChild(L(name + (hero.Specialization == branch ? "  ✓" : ""), 23, Teal));
-                bcol.AddChild(L(desc, 19, Ink, true));
-                bcol.AddChild(B(hero.Specialization == branch ? hero.SkillLevel >= 2 ? "已达到本版最高等级" : "强化此专精 · 1 技能点" : "选择此专精 · 1 技能点", () => Apply(() => _engine.LearnSkill(hero.Id, branch)), hero.Specialization == branch, 0, hero.SkillPoints == 0 || hero.SkillLevel >= 2 || (hero.Specialization.Length > 0 && hero.Specialization != branch)));
-                col.AddChild(box);
-            }
-            col.AddChild(L($"个人牌组 / {hero.Deck.Count} 张", 23, Gold));
-            foreach (var group in hero.Deck.GroupBy(id => id))
-            {
-                var card = Catalog.Card(group.Key);
-                col.AddChild(L($"{card.Name} × {group.Count()}  ·  {card.Cost} 行动\n{card.Description}", 18, Ink, true));
-            }
-            col.AddChild(L("替换一张牌", 22, Teal));
-            var remove = new OptionButton { CustomMinimumSize = new Vector2(0, 44) };
-            var existing = hero.Deck.Distinct().ToArray(); foreach (var id in existing) remove.AddItem(Catalog.Card(id).Name);
-            var add = new OptionButton { CustomMinimumSize = new Vector2(0, 44) };
-            var options = Catalog.DeckOptions(hero.Id).ToArray(); foreach (var card in options) add.AddItem(card.Name);
-            col.AddChild(L("移出", 17, Muted)); col.AddChild(remove); col.AddChild(L("加入", 17, Muted)); col.AddChild(add);
-            var replacement = L(options.Length > 0 ? options[0].Description : "", 18, Muted, true); col.AddChild(replacement);
-            add.ItemSelected += index => replacement.Text = options[(int)index].Description;
-            col.AddChild(B("确认替换", () =>
-            {
-                if (existing.Length > 0 && options.Length > 0) Apply(() => _engine.ChangeDeck(hero.Id, existing[remove.Selected], options[add.Selected].Id));
-            }));
-        }
-    }
-
     private void Assets()
     {
         var game = _game!;

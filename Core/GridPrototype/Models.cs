@@ -11,7 +11,7 @@ public readonly record struct Cell(int X, int Y)
 }
 public sealed class GridGame
 {
-    public int Version { get; set; } = 1;
+    public int Version { get; set; } = 2;
     public int Seed { get; set; } = 413;
     public uint RandomState { get; set; } = 413;
     public int Day { get; set; } = 1;
@@ -38,7 +38,8 @@ public sealed class HeroState
     public string Role { get; set; } = "";
     public int Health { get; set; } = 10;
     public int MaxHealth { get; set; } = 10;
-    public int SkillPoints { get; set; } = 1;
+    public int SkillPoints { get; set; } = 2;
+    public List<string> LearnedTalents { get; set; } = new();
     public string Specialization { get; set; } = "";
     public int SkillLevel { get; set; }
     public List<string> Deck { get; set; } = new();

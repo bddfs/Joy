@@ -63,7 +63,7 @@ public partial class GridMain
         }
         else
         {
-            var def = Catalog.Card(_card); var result = _engine.Preview(_hero, _card, _target);
+            var def = _engine.GetCardView(_hero, _card); var result = _engine.Preview(_hero, _card, _target);
             action.AddChild(L(def.Name, 28, Gold));
             action.AddChild(L($"{hero.Name} · {def.Cost} 行动 · 目标 {_target}", 18, Muted, true));
             action.AddChild(L(def.Description, 20, Ink, true));
@@ -84,7 +84,7 @@ public partial class GridMain
     }
     private void SelectCard(string cardId)
     {
-        _card = cardId; var def = Catalog.Card(cardId);
+        _card = cardId; var def = _engine.GetCardView(_hero, cardId);
         if (_game?.Field is not null && def.Target is "self" or "end" or "exit") _target = _game.Field.Actor(_hero).Cell;
         Render();
     }
@@ -98,7 +98,7 @@ public partial class GridMain
         var grid = new GridContainer { Columns = 6 }; grid.AddThemeConstantOverride("h_separation", 7); grid.AddThemeConstantOverride("v_separation", 7); basic.AddChild(grid);
         foreach (var cardId in Catalog.BasicIds)
         {
-            var def = Catalog.Card(cardId);
+            var def = _engine.GetCardView(_hero, cardId);
             var button = B(def.Name + $"\n{def.Cost} 行动", () => SelectCard(cardId), _card == cardId, 122);
             button.CustomMinimumSize = new Vector2(122, 67); button.AddThemeFontSizeOverride("font_size", 18); button.TooltipText = def.Description;
             grid.AddChild(button);
@@ -112,7 +112,7 @@ public partial class GridMain
     }
     private Control CardButton(string id, bool asset = false)
     {
-        var card = Catalog.Card(id);
+        var card = _engine.GetCardView(_hero, id);
         var button = new Button { CustomMinimumSize = new Vector2(160, 150), SizeFlagsHorizontal = SizeFlags.ExpandFill, FocusMode = FocusModeEnum.None, TooltipText = card.Description };
         button.AddThemeStyleboxOverride("normal", Box(_card == id ? new Color("2a4a47") : asset ? new Color("352d3f") : new Color("1b2b3d"), _card == id ? Gold : asset ? new Color("9d8bc9") : new Color("3b566a"), _card == id ? 2 : 1));
         var margin = new MarginContainer { MouseFilter = MouseFilterEnum.Ignore };
